@@ -28,6 +28,12 @@ Expected Impacts
 4. Automated Consulting Report: Translates data into concise, actionable insights & Demonstrates ability to bridege data analysis and consulting recommendations
 
 Example Codes
+
+import streamlit as st
+import pandas as pd
+import plotly.graph_objects as go
+import numpy as np
+
 # --------------------------
 # 1. Page Config & Title
 # --------------------------
