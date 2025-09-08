@@ -3,6 +3,7 @@
 Seunghyun Ryu (G01511261)
 
 Topic: Consulting Simulator
+
 Purpose: Portfolio project to showcase skills in 
 - Management Consultng
 - Data Analysis
@@ -29,23 +30,18 @@ Expected Impacts
 
 Example Codes
 
-import streamlit as st
-import pandas as pd
-import plotly.graph_objects as go
-import numpy as np
+    import streamlit as st
+    import pandas as pd
+    import plotly.graph_objects as go
+    import numpy as np
 
-# --------------------------
-# 1. Page Config & Title
-# --------------------------
-st.set_page_config(layout="wide")
-st.title("Advanced Consulting Simulator")
+    # --------------------------
+    # 1. Page Config & Title
+    # --------------------------
+    st.set_page_config(layout="wide")
+    st.title("Advanced Consulting Simulator")
 
-uploaded_file = st.file_uploader("Upload CSV with business metrics (Revenue, Cost, Employees)", type="csv")
-
-if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file)
-    st.subheader("Data Preview")
-    st.dataframe(data)
+    uploaded_file = st.file_uploader("Upload CSV with business metrics (Revenue, Cost, Employees)", type="csv")
 
     # --------------------------
     # 2. KPI Calculation
@@ -130,6 +126,3 @@ if uploaded_file is not None:
 
     for i, insight in enumerate(insights, 1):
         st.write(f"{i}. {insight}")
-
-else:
-    st.info("Please upload a CSV file to start analysis.")
