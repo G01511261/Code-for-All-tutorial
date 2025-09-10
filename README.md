@@ -1,59 +1,123 @@
 # Code-for-All-tutorial
 
-Seunghyun Ryu (G01511261)
+# Consulting Simulator
 
-Topic: Consulting Simulator
+**Author:** Seunghyun Ryu (G01511261)  
+**Project Type:** Portfolio / MVP Prototype  
+**Focus Areas:** Management Consulting · Data Analytics · Management Information Systems  
 
-Purpose: Portfolio project to showcase skills in 
-- Management Consultng
-- Data Analysis
-- Management Information Systems
+---
 
-Concept: "Consulting Simulator" is a data-driven MVP that allows users to input business data and receive real-time KPIs, scenario simulations, and automated consulting insights. The goal is to demonstrate how managment decisions can be supported by structured data analysis tools.
+## 🎯 Project Purpose
 
-Target Users: 
-- Small businesses or startups looking for quick & simple operational insights
-- Portfolio viewers (recruiters / consulting managers) to showcase analytical consulting capabilities
+The **Consulting Simulator** is a portfolio project designed to demonstrate how structured data can be transformed into **insights, recommendations, and decision support**.  
+It highlights applied skills in:
 
-MVP Features:
-1. Data Input - Users can upload CSV / Excel files with basic business metrics (Revenue / Costs / Employee count / Customer count / Inventory...)
-2. KPI Generation - Automatically calculate key performace indicators such as: ROI / Revenue per employee / customer retention rate / Inventory turnover
-3. Scenario Simulation - Users can modify variables to test hypothetical changes, e.g.: "Increase marketing budget by 10%", "Add 2 employees" - System predicts KPI changes in real-time and visualizes the outcomes
-4. Automated Consulting Report - Generates brief insights and recommendations based on KPI analysis 
-5. Dashboard Visualization - Graphs and charts for trends and patterns & Scenario simulation results dynamically updated on the dashboard
+- **Management Consulting:** framing problems and providing actionable recommendations.  
+- **Data Analysis:** calculating KPIs, forecasting, and scenario modeling.  
+- **Information Systems:** building a user-friendly MVP in Streamlit with dashboards and automation.  
 
-Expected Impacts
-1. Data Input: Users can quickly provide their business data
-2. KPI Generation: Converst raw data into actionable business metrics
-3. Scenario Simulation: Provdies interactive "what-if" analysis for decision making process
-4. Automated Consulting Report: Translates data into concise, actionable insights & Demonstrates ability to bridege data analysis and consulting recommendations
+---
 
-Example Codes
+## 💡 Concept
 
-    import streamlit as st
-    import pandas as pd
-    import plotly.graph_objects as go
-    import numpy as np
+The **Consulting Simulator** acts as a **lightweight decision-support tool**.  
+It enables users to:  
+
+1. Upload their **business data** (CSV/Excel).  
+2. Automatically generate **KPIs** like ROI, profit margin, revenue per employee, customer retention rate, and inventory turnover.  
+3. Run **scenario simulations** (e.g., increasing marketing budget, adding staff).  
+4. Receive **automated consulting insights** — a concise report highlighting risks & opportunities.  
+5. Visualize **dashboards and forecasts** interactively.  
+
+The tool bridges the gap between **business consulting frameworks** and **technical analytics execution**.
+
+---
+
+## 👥 Target Users
+
+- **Small businesses / startups** needing fast, simple insights.  
+- **Recruiters / consulting managers** reviewing a portfolio project that integrates analytics and consulting skills.  
+
+---
+
+## 🚀 MVP Features
+
+1. **Data Input**  
+   - Upload CSV/Excel with columns: `Revenue`, `Cost`, `Employees`, `Customers`, `Inventory`.  
+   - Missing values handled with defaults (e.g., zero, average).  
+
+2. **KPI Generation**  
+   - Automatically compute:  
+     - ROI  
+     - Profit Margin  
+     - Revenue per Employee  
+     - Inventory Turnover  
+     - Retention Rate (if available)  
+
+3. **Scenario Simulation**  
+   - Modify variables such as marketing spend or staffing.  
+   - View real-time KPI updates under simulated conditions.  
+
+4. **Automated Consulting Report**  
+   - AI-style logic generates short recommendations.  
+   - Example: “ROI is below 10%. Recommend cost optimization.”  
+
+5. **Dashboard Visualization**  
+   - Interactive charts (Plotly) showing revenue vs. cost, ROI comparison, forecasts.  
+
+---
+
+## 📊 Expected Impacts
+
+1. **Data Input:** Quick and intuitive way for businesses to provide operational data.  
+2. **KPI Generation:** Turns raw figures into **actionable business metrics**.  
+3. **Scenario Simulation:** Interactive “what-if” analysis improves decision-making.  
+4. **Automated Report:** Bridges the gap between **numbers and strategy**.  
+
+---
+
+## 🛠️ Example Code (app.py)
+
+```python
+import streamlit as st
+import pandas as pd
+import plotly.graph_objects as go
+import numpy as np
+
+# --------------------------
+# 1. Page Config & Title
+# --------------------------
+st.set_page_config(layout="wide")
+st.title("Consulting Simulator")
+
+uploaded_file = st.file_uploader("Upload CSV with business metrics (Revenue, Cost, Employees)", type=["csv", "xlsx"])
+
+if uploaded_file:
+    # --------------------------
+    # 2. Data Loading
+    # --------------------------
+    try:
+        if uploaded_file.name.endswith(".csv"):
+            data = pd.read_csv(uploaded_file)
+        else:
+            data = pd.read_excel(uploaded_file)
+    except Exception as e:
+        st.error(f"Error loading file: {e}")
+        st.stop()
 
     # --------------------------
-    # 1. Page Config & Title
-    # --------------------------
-    st.set_page_config(layout="wide")
-    st.title("Advanced Consulting Simulator")
-
-    uploaded_file = st.file_uploader("Upload CSV with business metrics (Revenue, Cost, Employees)", type="csv")
-
-    # --------------------------
-    # 2. KPI Calculation
+    # 3. KPI Calculation
     # --------------------------
     revenue = data['Revenue'].sum()
     cost = data['Cost'].sum()
-    employees = data['Employees'].sum()
+    employees = data['Employees'].sum() if 'Employees' in data.columns else 0
+
     roi = (revenue - cost) / cost if cost != 0 else 0
     revenue_per_employee = revenue / employees if employees != 0 else 0
     profit_margin = (revenue - cost) / revenue if revenue != 0 else 0
 
-    # KPI Cards (4 columns)
+    # KPI Cards
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Total Revenue", f"${revenue:,.0f}")
     col2.metric("ROI", f"{roi:.2%}")
@@ -61,7 +125,7 @@ Example Codes
     col4.metric("Profit Margin", f"{profit_margin:.2%}")
 
     # --------------------------
-    # 3. Scenario Simulation
+    # 4. Scenario Simulation
     # --------------------------
     st.subheader("Scenario Simulation")
     marketing_increase = st.number_input("Increase Marketing Budget by %", min_value=0, max_value=100, value=0)
@@ -73,7 +137,7 @@ Example Codes
     st.metric("Simulated ROI", f"{simulated_roi:.2%}")
 
     # --------------------------
-    # 4. Revenue & Cost Trend Plot
+    # 5. Revenue vs Cost Trend
     # --------------------------
     st.subheader("Revenue vs Cost Trend")
     fig = go.Figure()
@@ -83,7 +147,7 @@ Example Codes
     st.plotly_chart(fig, use_container_width=True)
 
     # --------------------------
-    # 5. ROI Scenario Comparison Chart
+    # 6. ROI Scenario Comparison
     # --------------------------
     st.subheader("ROI Scenario Comparison")
     scenario_fig = go.Figure()
@@ -93,11 +157,11 @@ Example Codes
     st.plotly_chart(scenario_fig, use_container_width=True)
 
     # --------------------------
-    # 6. Simple Forecast (Revenue & ROI)
+    # 7. Simple Forecast
     # --------------------------
     st.subheader("Revenue & ROI Forecast (Next 3 periods)")
     periods = 3
-    revenue_forecast = [revenue * (1 + 0.05 * i) for i in range(1, periods + 1)]  # simple 5% growth per period
+    revenue_forecast = [revenue * (1 + 0.05 * i) for i in range(1, periods + 1)]
     roi_forecast = [(revenue_forecast[i] - simulated_cost) / simulated_cost for i in range(periods)]
 
     forecast_fig = go.Figure()
@@ -109,20 +173,25 @@ Example Codes
     st.plotly_chart(forecast_fig, use_container_width=True)
 
     # --------------------------
-    # 7. Enhanced Automated Consulting Insights
+    # 8. Automated Consulting Insights
     # --------------------------
     st.subheader("Automated Consulting Insights")
     insights = []
     if roi < 0.1:
         insights.append("ROI is below 10%. Recommend cost optimization or efficiency improvements.")
     if revenue_per_employee < 50000:
-        insights.append("Revenue per employee is low. Consider training or process improvements.")
+        insights.append("Revenue per employee is low. Consider workforce training or process optimization.")
     if marketing_increase > 20:
-        insights.append("High marketing spend may reduce ROI; balance budget with expected revenue impact.")
+        insights.append("High marketing spend may reduce ROI; ensure alignment with expected revenue growth.")
     if profit_margin < 0.15:
         insights.append("Profit margin is under 15%. Review pricing strategy or reduce variable costs.")
     if simulated_roi > roi:
-        insights.append("Scenario simulation shows improved ROI. Evaluate feasibility of proposed changes.")
+        insights.append("Scenario shows improved ROI. Consider feasibility of proposed changes.")
 
-    for i, insight in enumerate(insights, 1):
-        st.write(f"{i}. {insight}")
+    if insights:
+        for i, insight in enumerate(insights, 1):
+            st.write(f"{i}. {insight}")
+    else:
+        st.write("All metrics are within healthy ranges. Keep current strategy.")
+else:
+    st.info("Please upload a CSV or Excel file to begin analysis.")
