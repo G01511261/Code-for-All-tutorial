@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulting Simulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <style>
+    body {
+      background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', Arial, sans-serif;
+    }
+    .hero {
+      background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+      color: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 24px rgba(60,60,120,0.08);
+      margin-bottom: 2rem;
+      padding: 2.5rem 2rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -80px; top: -80px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, #a5b4fc 0%, #6366f1 80%, transparent 100%);
+      opacity: 0.25;
+      z-index: 0;
+      animation: float 6s ease-in-out infinite alternate;
+    }
+    @keyframes float {
+      0% { transform: translateY(0);}
+      100% { transform: translateY(30px);}
+    }
+    .section-box {
+      background: #fff;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 12px rgba(60,60,120,0.07);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      margin-bottom: 2rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .section-box:hover {
+      box-shadow: 0 4px 24px rgba(60,60,120,0.13);
+      transform: translateY(-2px) scale(1.01);
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      color: #3b82f6;
+      letter-spacing: -1px;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .kpi-card {
+      border-radius: 1rem;
+      box-shadow: 0 2px 12px rgba(60,60,120,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: linear-gradient(120deg, #f1f5fd 0%, #e0e7ef 100%);
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      animation: fadeInUp 1s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-4px) scale(1.04) rotate(-1deg);
+      box-shadow: 0 6px 24px rgba(99,102,241,0.13);
+      background: linear-gradient(120deg, #e0e7ef 0%, #f1f5fd 100%);
+    }
+    .kpi-label {
+      font-size: 1.05rem;
+      color: #6366f1;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+    .kpi-value {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #22223b;
+      margin-top: 0.2rem;
+      transition: color 0.2s;
+    }
+    .kpi-card:hover .kpi-value {
+      color: #3b82f6;
+    }
+    .nav-tabs .nav-link.active {
+      background: #e0e7ef;
+      border-bottom: 2px solid #6366f1;
+      color: #3b82f6;
+      font-weight: 600;
+    }
+    .accordion-button:not(.collapsed) {
+      color: #3b82f6;
+      background-color: #f1f5fd;
+    }
+    .dashboard-chart {
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      box-shadow: 0 2px 8px rgba(60,60,120,0.04);
+      margin-bottom: 1.2rem;
+      min-height: 120px;
+      animation: fadeIn 1.2s;
+    }
+    .insight-list li {
+      margin-bottom: 0.7rem;
+      font-size: 1.05rem;
+      position: relative;
+      padding-left: 1.2em;
+      animation: fadeInLeft 0.8s;
+    }
+    .insight-list li::before {
+      content: "💡";
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .simulator-controls label {
+      font-weight: 500;
+      color: #6366f1;
+    }
+    .simulator-controls input[type=range] {
+      width: 100%;
+    }
+    .simulator-controls .form-range {
+      accent-color: #6366f1;
+    }
+    .simulator-controls .form-control {
+      max-width: 120px;
+      display: inline-block;
+    }
+    .dashboard-subtitle {
+      font-size: 1.07rem;
+      color: #64748b;
+      margin-bottom: 0.7rem;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+    }
+    .dashboard-tabs .nav-link {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #64748b;
+    }
+    .dashboard-tabs .nav-link.active {
+      color: #3b82f6;
+      background: #e0e7ef;
+    }
+    .dashboard-chart .chartjs-render-monitor {
+      animation: fadeIn 1.2s;
+    }
+    .footer {
+      margin-top: 3rem;
+      color: #64748b;
+      font-size: 0.97rem;
+      text-align: center;
+    }
+    .fade-in-delay-1 { animation-delay: 0.2s; }
+    .fade-in-delay-2 { animation-delay: 0.4s; }
+    .fade-in-delay-3 { animation-delay: 0.6s; }
+    .fade-in-delay-4 { animation-delay: 0.8s; }
+    @media (max-width: 768px) {
+      .section-box { padding: 1.2rem 0.7rem 1rem 0.7rem; }
+      .hero { padding: 1.2rem 0.7rem 1rem 0.7rem; }
+      .dashboard-chart { padding: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <!-- Hero Section -->
+    <div class="hero animate__animated animate__fadeInDown">
+      <h1 class="display-5 fw-bold mb-2"><i class="fa-solid fa-chart-line"></i> Consulting Simulator</h1>
+      <div class="fs-5 mt-2 mb-1">데이터 기반 의사결정 &middot; KPI 분석 &middot; 시나리오 시뮬레이션</div>
+      <div class="mt-2" style="font-size:1.1rem;">비즈니스 데이터를 업로드하고, 실시간 대시보드와 자동 인사이트를 경험하세요.</div>
+    </div>
+
+    <!-- 1. 파일 업로드 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-upload"></i> 1. 데이터 파일 업로드</div>
+      <form>
+        <div class="mb-3">
+          <label for="fileInput" class="form-label">CSV 또는 Excel 파일을 업로드하세요 <span class="text-secondary">(예: Revenue, Cost, Employees 등 컬럼 포함)</span></label>
+          <input class="form-control" type="file" id="fileInput" accept=".csv,.xlsx,.xls">
+        </div>
+        <div class="form-text">* 업로드 후 실시간 분석 결과가 아래 대시보드에 표시됩니다.</div>
+      </form>
+    </div>
+
+    <!-- 2. 실시간 KPI 대시보드 + 다양한 대시보드 탭 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-gauge-high"></i> 2. 실시간 KPI 대시보드</div>
+      <div class="row g-4 mb-2">
+        <div class="col-6 col-md-3">
+          <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-1">
+            <div class="kpi-label"><i class="fa-solid fa-sack-dollar"></i> 총 매출</div>
+            <div class="kpi-value" id="kpi-revenue">-</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-2">
+            <div class="kpi-label"><i class="fa-solid fa-percent"></i> ROI</div>
+            <div class="kpi-value" id="kpi-roi">-</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-3">
+            <div class="kpi-label"><i class="fa-solid fa-user-group"></i> 직원 1인당 매출</div>
+            <div class="kpi-value" id="kpi-rev-emp">-</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-4">
+            <div class="kpi-label"><i class="fa-solid fa-chart-pie"></i> 이익률</div>
+            <div class="kpi-value" id="kpi-margin">-</div>
+          </div>
+        </div>
+      </div>
+      <div class="dashboard-subtitle mt-4 mb-2"><i class="fa-solid fa-chart-bar"></i> 주요 대시보드</div>
+      <ul class="nav nav-tabs dashboard-tabs" id="dashboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab">매출 vs 비용</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab">월별 매출 추이</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab">고객별 매출 분포</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab4-tab" data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab">직원 생산성</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab5-tab" data-bs-toggle="tab" data-bs-target="#tab5" type="button" role="tab">재고 회전율</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab6-tab" data-bs-toggle="tab" data-bs-target="#tab6" type="button" role="tab">비용 구조 분석</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab7-tab" data-bs-toggle="tab" data-bs-target="#tab7" type="button" role="tab">고객 유지율 추이</button>
+        </li>
+      </ul>
+      <div class="tab-content dashboard-chart" id="dashboardTabsContent">
+        <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+          <canvas id="revenueCostChart" height="90"></canvas>
+        </div>
+        <div class="tab-pane fade" id="tab2" role="tabpanel">
+          <canvas id="monthlyRevenueChart" height="90"></canvas>
+        </div>
+        <div class="tab-pane fade" id="tab3" role="tabpanel">
+          <canvas id="customerRevenueChart" height="90"></canvas>
+        </div>
+        <div class="tab-pane fade" id="tab4" role="tabpanel">
+          <canvas id="employeeProductivityChart" height="90"></canvas>
+        </div>
+        <div class="tab-pane fade" id="tab5" role="tabpanel">
+          <canvas id="inventoryTurnoverChart" height="90"></canvas>
+        </div>
+        <div class="tab-pane fade" id="tab6" role="tabpanel">
+          <canvas id="costStructureChart" height="90"></canvas>
+        </div>
+        <div class="tab-pane fade" id="tab7" role="tabpanel">
+          <canvas id="retentionRateChart" height="90"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 시나리오 시뮬레이션 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-flask-vial"></i> 3. 시나리오 시뮬레이션</div>
+      <div class="row">
+        <div class="col-md-5 simulator-controls">
+          <label for="marketingRange" class="form-label">마케팅 예산 증가율 (%)</label>
+          <input type="range" class="form-range mb-2" min="0" max="100" step="5" id="marketingRange" value="0" oninput="document.getElementById('marketingValue').innerText=this.value">
+          <span id="marketingValue" class="badge bg-primary">0</span> %
+          <br>
+          <label for="employeeInput" class="form-label mt-3">추가 인원 수</label>
+          <input type="number" class="form-control d-inline-block" id="employeeInput" min="0" max="20" value="0" style="width:90px;">
+        </div>
+        <div class="col-md-7">
+          <div class="row g-3">
+            <div class="col-6 col-lg-4">
+              <div class="kpi-card text-center p-2">
+                <div class="kpi-label">시뮬레이션 비용</div>
+                <div class="kpi-value" id="sim-cost">-</div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-4">
+              <div class="kpi-card text-center p-2">
+                <div class="kpi-label">시뮬레이션 ROI</div>
+                <div class="kpi-value" id="sim-roi">-</div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <div class="kpi-card text-center p-2">
+                <div class="kpi-label">ROI 변화</div>
+                <div class="kpi-value" id="sim-roi-diff">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-chart mt-3">
+            <canvas id="roiScenarioChart" height="60"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 자동 컨설팅 인사이트 & 예측 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-lightbulb"></i> 4. 자동 컨설팅 인사이트 & 예측</div>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="insight-list" id="insightList">
+            <li>데이터를 업로드하면 자동 인사이트가 표시됩니다.</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <div class="dashboard-chart">
+            <canvas id="forecastChart" height="70"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 데이터 테이블 (아코디언) -->
+    <div class="accordion mb-4" id="dataAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingData">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseData" aria-expanded="false" aria-controls="collapseData">
+            <i class="fa-solid fa-table"></i> 데이터 테이블 보기
+          </button>
+        </h2>
+        <div id="collapseData" class="accordion-collapse collapse" aria-labelledby="headingData" data-bs-parent="#dataAccordion">
+          <div class="accordion-body">
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm align-middle" id="dataTable">
+                <thead>
+                  <tr>
+                    <th>Revenue</th>
+                    <th>Cost</th>
+                    <th>Employees</th>
+                    <th>Customers</th>
+                    <th>Inventory</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td colspan="5" class="text-center text-secondary">데이터를 업로드하세요.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      &copy; 2024 Consulting Simulator &middot; All rights reserved.
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- PapaParse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    // --- Chart.js chart instances ---
+    let revenueCostChart, roiScenarioChart, forecastChart;
+    let monthlyRevenueChart, customerRevenueChart, employeeProductivityChart, inventoryTurnoverChart;
+    let costStructureChart, retentionRateChart;
+
+    // --- Helper: Format number with commas ---
+    function formatNumber(num) {
+      if (isNaN(num)) return '-';
+      return num.toLocaleString('ko-KR');
+    }
+    function formatPercent(num) {
+      if (isNaN(num)) return '-';
+      return (num*100).toFixed(1) + '%';
+    }
+
+    // --- File Upload Handler ---
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (ext === 'csv') {
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: true,
+          complete: function(results) {
+            handleData(results.data);
+          }
+        });
+      } else {
+        alert('CSV 파일만 지원합니다. (Excel은 Streamlit에서 지원)');
+      }
+    });
+
+    // --- Main Data Handler ---
+    let globalData = [];
+    function handleData(data) {
+      // 필수 컬럼 체크 및 결측치 처리
+      const cols = ['Revenue','Cost','Employees','Customers','Inventory'];
+      data = data.map(row => {
+        let newRow = {};
+        cols.forEach(col => {
+          newRow[col] = Number(row[col]) || 0;
+        });
+        return newRow;
+      });
+      globalData = data;
+      updateTable(data);
+      updateKPIs(data);
+      updateCharts(data);
+      updateInsights(data);
+    }
+
+    // --- Update Data Table ---
+    function updateTable(data) {
+      const tbody = document.querySelector('#dataTable tbody');
+      tbody.innerHTML = '';
+      if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-secondary">데이터를 업로드하세요.</td></tr>';
+        return;
+      }
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${formatNumber(row.Revenue)}</td>
+                        <td>${formatNumber(row.Cost)}</td>
+                        <td>${formatNumber(row.Employees)}</td>
+                        <td>${formatNumber(row.Customers)}</td>
+                        <td>${formatNumber(row.Inventory)}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- Update KPI Cards ---
+    function updateKPIs(data) {
+      let revenue = data.reduce((a,b)=>a+b.Revenue,0);
+      let cost = data.reduce((a,b)=>a+b.Cost,0);
+      let employees = data.reduce((a,b)=>a+b.Employees,0);
+      let roi = cost ? (revenue-cost)/cost : 0;
+      let revEmp = employees ? revenue/employees : 0;
+      let margin = revenue ? (revenue-cost)/revenue : 0;
+
+      document.getElementById('kpi-revenue').innerText = formatNumber(revenue) + ' 원';
+      document.getElementById('kpi-roi').innerText = formatPercent(roi);
+      document.getElementById('kpi-rev-emp').innerText = formatNumber(revEmp) + ' 원';
+      document.getElementById('kpi-margin').innerText = formatPercent(margin);
+
+      // 시뮬레이션도 업데이트
+      updateSimulation();
+    }
+
+    // --- Update Main Charts & 다양한 대시보드 ---
+    function updateCharts(data) {
+      // Revenue vs Cost Chart
+      const labels = data.map((_,i)=>`Entry ${i+1}`);
+      const revenueArr = data.map(r=>r.Revenue);
+      const costArr = data.map(r=>r.Cost);
+
+      if (revenueCostChart) revenueCostChart.destroy();
+      const ctx1 = document.getElementById('revenueCostChart').getContext('2d');
+      revenueCostChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Revenue', data: revenueArr, backgroundColor: 'rgba(59,130,246,0.7)' },
+            { label: 'Cost', data: costArr, backgroundColor: 'rgba(99,102,241,0.7)' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          animation: { duration: 1200, easing: 'easeOutQuart' }
+        }
+      });
+
+      // --- 월별 매출 추이 (임의 그룹핑) ---
+      if (monthlyRevenueChart) monthlyRevenueChart.destroy();
+      const ctx2 = document.getElementById('monthlyRevenueChart').getContext('2d');
+      let monthLabels = ['1월','2월','3월','4월','5월','6월'];
+      let monthData = Array(monthLabels.length).fill(0);
+      data.forEach((row,i)=>{
+        monthData[i%monthLabels.length] += row.Revenue;
+      });
+      monthlyRevenueChart = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: monthLabels,
+          datasets: [
+            { label: '월별 매출', data: monthData, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', tension:0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 고객별 매출 분포 (임의 분포) ---
+      if (customerRevenueChart) customerRevenueChart.destroy();
+      const ctx3 = document.getElementById('customerRevenueChart').getContext('2d');
+      let customerMap = {};
+      data.forEach(row=>{
+        let cust = row.Customers || '기타';
+        customerMap[cust] = (customerMap[cust]||0) + row.Revenue;
+      });
+      let custLabels = Object.keys(customerMap);
+      let custData = Object.values(customerMap);
+      customerRevenueChart = new Chart(ctx3, {
+        type: 'pie',
+        data: {
+          labels: custLabels,
+          datasets: [
+            { label: '고객별 매출', data: custData, backgroundColor: ['#6366f1','#3b82f6','#60a5fa','#a5b4fc','#c7d2fe','#fbbf24','#f87171'] }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 직원 생산성 (직원 1인당 매출) ---
+      if (employeeProductivityChart) employeeProductivityChart.destroy();
+      const ctx4 = document.getElementById('employeeProductivityChart').getContext('2d');
+      let empLabels = data.map((_,i)=>`Entry ${i+1}`);
+      let empData = data.map(row=>row.Employees?row.Revenue/row.Employees:0);
+      employeeProductivityChart = new Chart(ctx4, {
+        type: 'bar',
+        data: {
+          labels: empLabels,
+          datasets: [
+            { label: '직원 1인당 매출', data: empData, backgroundColor: '#6366f1' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 재고 회전율 (Inventory Turnover) ---
+      if (inventoryTurnoverChart) inventoryTurnoverChart.destroy();
+      const ctx5 = document.getElementById('inventoryTurnoverChart').getContext('2d');
+      let invLabels = data.map((_,i)=>`Entry ${i+1}`);
+      let invData = data.map(row=>row.Inventory?row.Revenue/row.Inventory:0);
+      inventoryTurnoverChart = new Chart(ctx5, {
+        type: 'line',
+        data: {
+          labels: invLabels,
+          datasets: [
+            { label: '재고 회전율', data: invData, borderColor: '#60a5fa', backgroundColor: 'rgba(96,165,250,0.1)', tension:0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 비용 구조 분석 (Cost Structure) ---
+      if (costStructureChart) costStructureChart.destroy();
+      const ctx6 = document.getElementById('costStructureChart').getContext('2d');
+      let totalCost = data.reduce((a,b)=>a+b.Cost,0);
+      let totalRevenue = data.reduce((a,b)=>a+b.Revenue,0);
+      let costRatio = totalRevenue ? totalCost/totalRevenue : 0;
+      costStructureChart = new Chart(ctx6, {
+        type: 'doughnut',
+        data: {
+          labels: ['비용', '이익'],
+          datasets: [{
+            data: [totalCost, totalRevenue-totalCost],
+            backgroundColor: ['#f87171','#34d399']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 고객 유지율 추이 (Retention Rate) ---
+      if (retentionRateChart) retentionRateChart.destroy();
+      const ctx7 = document.getElementById('retentionRateChart').getContext('2d');
+      // 임의로 고객 수 증감으로 유지율 계산
+      let retentionLabels = ['1분기','2분기','3분기','4분기'];
+      let retentionData = [100, 90, 85, 80].map((v,i)=>data.length ? (data[i%data.length].Customers/100) : 0);
+      retentionRateChart = new Chart(ctx7, {
+        type: 'line',
+        data: {
+          labels: retentionLabels,
+          datasets: [
+            { label: '고객 유지율', data: retentionData, borderColor: '#fbbf24', backgroundColor: 'rgba(251,191,36,0.1)', tension:0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { min: 0, max: 1, ticks: { callback: v=>(v*100).toFixed(0)+'%' } } }
+        }
+      });
+    }
+
+    // --- Scenario Simulation ---
+    document.getElementById('marketingRange').addEventListener('input', updateSimulation);
+    document.getElementById('employeeInput').addEventListener('input', updateSimulation);
+
+    function updateSimulation() {
+      if (!globalData.length) {
+        document.getElementById('sim-cost').innerText = '-';
+        document.getElementById('sim-roi').innerText = '-';
+        document.getElementById('sim-roi-diff').innerText = '-';
+        if (roiScenarioChart) roiScenarioChart.destroy();
+        updateForecast([]);
+        return;
+      }
+      let revenue = globalData.reduce((a,b)=>a+b.Revenue,0);
+      let cost = globalData.reduce((a,b)=>a+b.Cost,0);
+      let employees = globalData.reduce((a,b)=>a+b.Employees,0);
+
+      let marketingInc = Number(document.getElementById('marketingRange').value);
+      let addEmp = Number(document.getElementById('employeeInput').value);
+
+      let simCost = cost + cost*(marketingInc/100) + addEmp*5000;
+      let roi = cost ? (revenue-cost)/cost : 0;
+      let simRoi = simCost ? (revenue-simCost)/simCost : 0;
+      let roiDiff = simRoi - roi;
+
+      document.getElementById('sim-cost').innerText = formatNumber(simCost) + ' 원';
+      document.getElementById('sim-roi').innerText = formatPercent(simRoi);
+      document.getElementById('sim-roi-diff').innerText = (roiDiff>=0?'+':'') + formatPercent(roiDiff);
+
+      // ROI Scenario Chart
+      if (roiScenarioChart) roiScenarioChart.destroy();
+      const ctx2 = document.getElementById('roiScenarioChart').getContext('2d');
+      roiScenarioChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['현재 ROI', '시뮬레이션 ROI'],
+          datasets: [{
+            label: 'ROI',
+            data: [roi, simRoi],
+            backgroundColor: ['#6366f1','#3b82f6']
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          plugins: { legend: { display: false } },
+          scales: { x: { min: -1, max: 1, ticks: { callback: v=>(v*100).toFixed(0)+'%' } } }
+        }
+      });
+
+      // Forecast도 업데이트
+      updateForecast([revenue, simCost]);
+      updateInsights(globalData, roi, simRoi, marketingInc, employees, revenue);
+    }
+
+    // --- Forecast Chart ---
+    function updateForecast([revenue, simCost]) {
+      if (!revenue || !simCost) {
+        if (forecastChart) forecastChart.destroy();
+        return;
+      }
+      let periods = 3;
+      let revenueForecast = Array.from({length:periods}, (_,i)=>revenue*(1+0.05*(i+1)));
+      let roiForecast = revenueForecast.map(rf=>(rf-simCost)/simCost);
+
+      if (forecastChart) forecastChart.destroy();
+      const ctx3 = document.getElementById('forecastChart').getContext('2d');
+      forecastChart = new Chart(ctx3, {
+        type: 'line',
+        data: {
+          labels: ['Period 1','Period 2','Period 3'],
+          datasets: [
+            { label: 'Revenue Forecast', data: revenueForecast, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', yAxisID:'y' },
+            { label: 'ROI Forecast', data: roiForecast, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.1)', yAxisID:'y1' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          scales: {
+            y: { type:'linear', position:'left', title:{display:true,text:'Revenue'} },
+            y1: { type:'linear', position:'right', title:{display:true,text:'ROI'}, min:-1, max:1, ticks:{callback:v=>(v*100).toFixed(0)+'%'} }
+          }
+        }
+      });
+    }
+
+    // --- Automated Insights ---
+    function updateInsights(data, roi, simRoi, marketingInc, employees, revenue) {
+      const ul = document.getElementById('insightList');
+      ul.innerHTML = '';
+      if (!data.length) {
+        ul.innerHTML = '<li>데이터를 업로드하면 자동 인사이트가 표시됩니다.</li>';
+        return;
+      }
+      let revEmp = employees ? revenue/employees : 0;
+      let margin = revenue ? (revenue-data.reduce((a,b)=>a+b.Cost,0))/revenue : 0;
+      let insights = [];
+      if (roi < 0.1) insights.push('ROI가 10% 미만입니다. 비용 최적화 또는 효율성 개선을 권장합니다.');
+      if (revEmp < 50000) insights.push('직원 1인당 매출이 낮습니다. 업무 프로세스 개선 또는 교육을 고려하세요.');
+      if (marketingInc > 20) insights.push('마케팅 예산이 과도하게 증가했습니다. 기대 매출 증가와의 정합성을 검토하세요.');
+      if (margin < 0.15) insights.push('이익률이 15% 미만입니다. 가격 정책 또는 변동비 절감을 검토하세요.');
+      if (simRoi > roi) insights.push('시뮬레이션 결과 ROI가 개선됩니다. 변경안의 실행 가능성을 검토하세요.');
+      if (!insights.length) insights.push('모든 주요 지표가 양호합니다. 현재 전략을 유지하세요.');
+      insights.forEach(txt=>{
+        const li = document.createElement('li');
+        li.innerText = txt;
+        ul.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
