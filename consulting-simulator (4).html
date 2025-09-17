@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulting Simulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <style>
+    body {
+      background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', Arial, sans-serif;
+    }
+    .hero {
+      background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+      color: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 24px rgba(60,60,120,0.08);
+      margin-bottom: 2rem;
+      padding: 2.5rem 2rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -80px; top: -80px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, #a5b4fc 0%, #6366f1 80%, transparent 100%);
+      opacity: 0.25;
+      z-index: 0;
+      animation: float 6s ease-in-out infinite alternate;
+    }
+    @keyframes float {
+      0% { transform: translateY(0);}
+      100% { transform: translateY(30px);}
+    }
+    .section-box {
+      background: #fff;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 12px rgba(60,60,120,0.07);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      margin-bottom: 2rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .section-box:hover {
+      box-shadow: 0 4px 24px rgba(60,60,120,0.13);
+      transform: translateY(-2px) scale(1.01);
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      color: #3b82f6;
+      letter-spacing: -1px;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .kpi-card {
+      border-radius: 1rem;
+      box-shadow: 0 2px 12px rgba(60,60,120,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: linear-gradient(120deg, #f1f5fd 0%, #e0e7ef 100%);
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      animation: fadeInUp 1s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-4px) scale(1.04) rotate(-1deg);
+      box-shadow: 0 6px 24px rgba(99,102,241,0.13);
+      background: linear-gradient(120deg, #e0e7ef 0%, #f1f5fd 100%);
+    }
+    .kpi-label {
+      font-size: 1.05rem;
+      color: #6366f1;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+    .kpi-value {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #22223b;
+      margin-top: 0.2rem;
+      transition: color 0.2s;
+    }
+    .kpi-card:hover .kpi-value {
+      color: #3b82f6;
+    }
+    .nav-tabs .nav-link.active {
+      background: #e0e7ef;
+      border-bottom: 2px solid #6366f1;
+      color: #3b82f6;
+      font-weight: 600;
+    }
+    .accordion-button:not(.collapsed) {
+      color: #3b82f6;
+      background-color: #f1f5fd;
+    }
+    .dashboard-chart {
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      box-shadow: 0 2px 8px rgba(60,60,120,0.04);
+      margin-bottom: 1.2rem;
+      min-height: 120px;
+      animation: fadeIn 1.2s;
+    }
+    .insight-list li {
+      margin-bottom: 0.7rem;
+      font-size: 1.05rem;
+      position: relative;
+      padding-left: 1.2em;
+      animation: fadeInLeft 0.8s;
+    }
+    .insight-list li::before {
+      content: "💡";
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .simulator-controls label {
+      font-weight: 500;
+      color: #6366f1;
+    }
+    .simulator-controls input[type=range] {
+      width: 100%;
+    }
+    .simulator-controls .form-range {
+      accent-color: #6366f1;
+    }
+    .simulator-controls .form-control {
+      max-width: 120px;
+      display: inline-block;
+    }
+    .dashboard-subtitle {
+      font-size: 1.07rem;
+      color: #64748b;
+      margin-bottom: 0.7rem;
+      font-weight: 500;
+      letter-spacing: -0.5px;
+    }
+    .dashboard-tabs .nav-link {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #64748b;
+    }
+    .dashboard-tabs .nav-link.active {
+      color: #3b82f6;
+      background: #e0e7ef;
+    }
+    .dashboard-chart .chartjs-render-monitor {
+      animation: fadeIn 1.2s;
+    }
+    .footer {
+      margin-top: 3rem;
+      color: #64748b;
+      font-size: 0.97rem;
+      text-align: center;
+    }
+    .fade-in-delay-1 { animation-delay: 0.2s; }
+    .fade-in-delay-2 { animation-delay: 0.4s; }
+    .fade-in-delay-3 { animation-delay: 0.6s; }
+    .fade-in-delay-4 { animation-delay: 0.8s; }
+    @media (max-width: 768px) {
+      .section-box { padding: 1.2rem 0.7rem 1rem 0.7rem; }
+      .hero { padding: 1.2rem 0.7rem 1rem 0.7rem; }
+      .dashboard-chart { padding: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <!-- Hero Section -->
+    <div class="hero animate__animated animate__fadeInDown">
+      <h1 class="display-5 fw-bold mb-2"><i class="fa-solid fa-chart-line"></i> Consulting Simulator</h1>
+      <div class="fs-5 mt-2 mb-1">데이터 기반 의사결정 &middot; KPI 분석 &middot; 시나리오 시뮬레이션</div>
+      <div class="mt-2" style="font-size:1.1rem;">
+        비즈니스 데이터를 업로드하고, 실시간 대시보드와 자동 인사이트를 경험하세요.<br>
+        <span class="fw-semibold">컨설팅 시뮬레이터는 다양한 경영 데이터를 시각화하고, 시나리오별 결과를 예측하여<br>
+        실제 컨설팅 프로젝트처럼 전략적 의사결정을 지원합니다.</span>
+      </div>
+      <div class="mt-3">
+        <ul>
+          <li>실제 컨설팅에서 사용하는 KPI 분석, 비용 구조, 고객 분석, 성장 예측 등 다양한 분석 기능 제공</li>
+          <li>시나리오별로 주요 지표가 어떻게 변화하는지 실시간으로 확인</li>
+          <li>자동 인사이트 및 경고, 개선 제안까지 한 번에!</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 1. 데이터 파일 업로드 + 데이터 구조 안내 + 샘플 다운로드 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-upload"></i> 1. 데이터 파일 업로드</div>
+      <div class="mb-2">
+        <span class="fw-semibold">분석하고자 하는 비즈니스 데이터를 업로드하세요.</span><br>
+        <span class="text-secondary">* CSV 파일만 지원합니다. (Excel은 별도 지원 예정)</span>
+      </div>
+      <form>
+        <div class="mb-3">
+          <label for="fileInput" class="form-label">CSV 파일 업로드 <span class="text-secondary">(예: Revenue, Cost, Employees, Customers, Inventory 등 컬럼 포함)</span></label>
+          <input class="form-control" type="file" id="fileInput" accept=".csv">
+        </div>
+        <div class="form-text mb-2">
+          <b>데이터 예시:</b> <span class="text-secondary">Revenue, Cost, Employees, Customers, Inventory, Marketing, Product, Region, Date 등 다양한 컬럼을 포함할 수 있습니다.</span>
+        </div>
+        <div class="mb-2">
+          <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-download"></i> 샘플 데이터 다운로드</a>
+        </div>
+        <ul class="mb-0">
+          <li>파일 내 <b>날짜, 제품, 지역, 마케팅비, 고객 등</b> 다양한 컬럼을 추가하면 더 풍부한 분석이 가능합니다.</li>
+          <li>데이터가 없을 경우 샘플 데이터를 활용해 기능을 체험해보세요.</li>
+        </ul>
+      </form>
+    </div>
+
+    <!-- 2. 실시간 KPI 대시보드 + 다양한 대시보드 탭 + 상세 설명 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-gauge-high"></i> 2. 실시간 KPI 대시보드</div>
+      <div class="mb-2">
+        <span class="fw-semibold">주요 경영 지표를 한눈에 확인하세요.</span><br>
+        <span class="text-secondary">업로드한 데이터 기반으로 <b>매출, 비용, ROI, 이익률, 직원 생산성</b> 등 핵심 KPI가 자동 계산됩니다.</span>
+      </div>
+      <div class="row g-4 mb-2">
+        <div class="col-6 col-md-3">
+          <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-1">
+            <div class="kpi-label"><i class="fa-solid fa-sack-dollar"></i> 총 매출</div>
+            <div class="kpi-value" id="kpi-revenue">-</div>
+            <div class="small text-secondary mt-1">전체 기간 동안 발생한 총 매출액</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-2">
+            <div class="kpi-label"><i class="fa-solid fa-percent"></i> ROI</div>
+            <div class="kpi-value" id="kpi-roi">-</div>
+            <div class="small text-secondary mt-1">투자 대비 수익률 (Return on Investment)</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-3">
+            <div class="kpi-label"><i class="fa-solid fa-user-group"></i> 직원 1인당 매출</div>
+            <div class="kpi-value" id="kpi-rev-emp">-</div>
+            <div class="small text-secondary mt-1">직원 한 명이 창출한 평균 매출</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-4">
+            <div class="kpi-label"><i class="fa-solid fa-chart-pie"></i> 이익률</div>
+            <div class="kpi-value" id="kpi-margin">-</div>
+            <div class="small text-secondary mt-1">매출 대비 이익의 비율</div>
+          </div>
+        </div>
+      </div>
+      <div class="dashboard-subtitle mt-4 mb-2"><i class="fa-solid fa-chart-bar"></i> 주요 대시보드</div>
+      <div class="mb-2">
+        <span class="fw-semibold">다양한 관점에서 데이터를 분석하세요.</span><br>
+        <span class="text-secondary">아래 탭을 클릭하면 <b>매출/비용, 월별 추이, 고객별 분포, 직원 생산성, 재고, 비용 구조, 고객 유지율</b> 등 다양한 시각화 결과를 확인할 수 있습니다.</span>
+      </div>
+      <ul class="nav nav-tabs dashboard-tabs" id="dashboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab">매출 vs 비용</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab">월별 매출 추이</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab">고객별 매출 분포</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab4-tab" data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab">직원 생산성</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab5-tab" data-bs-toggle="tab" data-bs-target="#tab5" type="button" role="tab">재고 회전율</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab6-tab" data-bs-toggle="tab" data-bs-target="#tab6" type="button" role="tab">비용 구조 분석</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab7-tab" data-bs-toggle="tab" data-bs-target="#tab7" type="button" role="tab">고객 유지율 추이</button>
+        </li>
+        <!-- 추가: 제품별 매출, 지역별 매출, 마케팅 효과, 성장률, 고객 세그먼트, 제품별 이익률, 월별 신규 고객 -->
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab8-tab" data-bs-toggle="tab" data-bs-target="#tab8" type="button" role="tab">제품별 매출</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab9-tab" data-bs-toggle="tab" data-bs-target="#tab9" type="button" role="tab">지역별 매출</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab10-tab" data-bs-toggle="tab" data-bs-target="#tab10" type="button" role="tab">마케팅 효과 분석</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab11-tab" data-bs-toggle="tab" data-bs-target="#tab11" type="button" role="tab">성장률 추이</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab12-tab" data-bs-toggle="tab" data-bs-target="#tab12" type="button" role="tab">고객 세그먼트</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab13-tab" data-bs-toggle="tab" data-bs-target="#tab13" type="button" role="tab">제품별 이익률</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab14-tab" data-bs-toggle="tab" data-bs-target="#tab14" type="button" role="tab">월별 신규 고객</button>
+        </li>
+      </ul>
+      <div class="tab-content dashboard-chart" id="dashboardTabsContent">
+        <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+          <canvas id="revenueCostChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">매출과 비용의 상대적 규모를 비교하여 수익성 구조를 파악할 수 있습니다.</div>
+        </div>
+        <div class="tab-pane fade" id="tab2" role="tabpanel">
+          <canvas id="monthlyRevenueChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">월별 매출 추이를 통해 계절성, 성장 패턴, 이상치 등을 확인하세요.</div>
+        </div>
+        <div class="tab-pane fade" id="tab3" role="tabpanel">
+          <canvas id="customerRevenueChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">고객별 매출 분포를 통해 핵심 고객군을 파악할 수 있습니다.</div>
+        </div>
+        <div class="tab-pane fade" id="tab4" role="tabpanel">
+          <canvas id="employeeProductivityChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">직원 1인당 매출로 인적 자원의 효율성을 진단하세요.</div>
+        </div>
+        <div class="tab-pane fade" id="tab5" role="tabpanel">
+          <canvas id="inventoryTurnoverChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">재고 회전율이 높을수록 재고 관리가 효율적임을 의미합니다.</div>
+        </div>
+        <div class="tab-pane fade" id="tab6" role="tabpanel">
+          <canvas id="costStructureChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">비용 구조를 시각화하여 고정비/변동비 비중을 파악하세요.</div>
+        </div>
+        <div class="tab-pane fade" id="tab7" role="tabpanel">
+          <canvas id="retentionRateChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">고객 유지율 추이를 통해 충성 고객 확보 현황을 분석할 수 있습니다.</div>
+        </div>
+        <!-- 추가 대시보드 탭 -->
+        <div class="tab-pane fade" id="tab8" role="tabpanel">
+          <canvas id="productRevenueChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">제품별 매출 비중을 분석하여 주력 상품을 파악하세요.</div>
+        </div>
+        <div class="tab-pane fade" id="tab9" role="tabpanel">
+          <canvas id="regionRevenueChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">지역별 매출 분포를 통해 시장 확장 전략을 수립할 수 있습니다.</div>
+        </div>
+        <div class="tab-pane fade" id="tab10" role="tabpanel">
+          <canvas id="marketingEffectChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">마케팅 비용 대비 매출 효과를 분석하여 효율적인 예산 배분이 가능합니다.</div>
+        </div>
+        <div class="tab-pane fade" id="tab11" role="tabpanel">
+          <canvas id="growthRateChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">기간별 성장률을 시각화하여 성장 동력을 진단하세요.</div>
+        </div>
+        <div class="tab-pane fade" id="tab12" role="tabpanel">
+          <canvas id="customerSegmentChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">고객 세그먼트별 매출/이익 기여도를 분석할 수 있습니다.</div>
+        </div>
+        <div class="tab-pane fade" id="tab13" role="tabpanel">
+          <canvas id="productMarginChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">제품별 이익률을 비교하여 수익성이 높은 상품을 파악하세요.</div>
+        </div>
+        <div class="tab-pane fade" id="tab14" role="tabpanel">
+          <canvas id="newCustomerChart" height="90"></canvas>
+          <div class="small text-secondary mt-2">월별 신규 고객 유입 추이를 분석할 수 있습니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 시나리오 시뮬레이션 + 다양한 변수 + 가이드 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-flask-vial"></i> 3. 시나리오 시뮬레이션</div>
+      <div class="mb-2">
+        <span class="fw-semibold">경영 전략을 가상으로 적용해보고, 주요 지표가 어떻게 변화하는지 실시간으로 확인하세요.</span><br>
+        <span class="text-secondary">마케팅 예산, 인원, 가격, 제품 수, 신규 고객 등 다양한 변수를 조정할 수 있습니다.</span>
+      </div>
+      <div class="row">
+        <div class="col-md-5 simulator-controls">
+          <label for="marketingRange" class="form-label">마케팅 예산 증가율 (%)</label>
+          <input type="range" class="form-range mb-2" min="0" max="100" step="5" id="marketingRange" value="0" oninput="document.getElementById('marketingValue').innerText=this.value">
+          <span id="marketingValue" class="badge bg-primary">0</span> %
+          <br>
+          <label for="employeeInput" class="form-label mt-3">추가 인원 수</label>
+          <input type="number" class="form-control d-inline-block" id="employeeInput" min="0" max="20" value="0" style="width:90px;">
+          <br>
+          <!-- 추가: 가격 조정, 신규 고객 유치, 제품 수 확장 -->
+          <label for="priceRange" class="form-label mt-3">제품 가격 조정 (%)</label>
+          <input type="range" class="form-range mb-2" min="-20" max="20" step="2" id="priceRange" value="0" oninput="document.getElementById('priceValue').innerText=this.value">
+          <span id="priceValue" class="badge bg-success">0</span> %
+          <br>
+          <label for="newCustomerInput" class="form-label mt-3">신규 고객 유치 수</label>
+          <input type="number" class="form-control d-inline-block" id="newCustomerInput" min="0" max="100" value="0" style="width:90px;">
+          <br>
+          <label for="productInput" class="form-label mt-3">신규 제품 출시 수</label>
+          <input type="number" class="form-control d-inline-block" id="productInput" min="0" max="10" value="0" style="width:90px;">
+          <div class="form-text mt-2">
+            <b>Tip:</b> 여러 변수를 조합하여 다양한 시나리오를 실험해보세요.<br>
+            <span class="text-secondary">예) 마케팅 예산 20% 증가 + 신규 고객 30명 유치 + 가격 5% 인상</span>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="row g-3">
+            <div class="col-6 col-lg-4">
+              <div class="kpi-card text-center p-2">
+                <div class="kpi-label">시뮬레이션 비용</div>
+                <div class="kpi-value" id="sim-cost">-</div>
+                <div class="small text-secondary">변수 조정 후 예상 비용</div>
+              </div>
+            </div>
+            <div class="col-6 col-lg-4">
+              <div class="kpi-card text-center p-2">
+                <div class="kpi-label">시뮬레이션 ROI</div>
+                <div class="kpi-value" id="sim-roi">-</div>
+                <div class="small text-secondary">변수 조정 후 예상 ROI</div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+              <div class="kpi-card text-center p-2">
+                <div class="kpi-label">ROI 변화</div>
+                <div class="kpi-value" id="sim-roi-diff">-</div>
+                <div class="small text-secondary">현재 대비 ROI 증감</div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-chart mt-3">
+            <canvas id="roiScenarioChart" height="60"></canvas>
+            <div class="small text-secondary mt-2">시나리오별 ROI 변화를 시각적으로 비교할 수 있습니다.</div>
+          </div>
+          <!-- 추가: 시뮬레이션 결과 상세 표 -->
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>변수</th>
+                  <th>현재값</th>
+                  <th>시뮬레이션값</th>
+                  <th>증감</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>매출</td>
+                  <td id="sim-revenue-current">-</td>
+                  <td id="sim-revenue-sim">-</td>
+                  <td id="sim-revenue-diff">-</td>
+                </tr>
+                <tr>
+                  <td>비용</td>
+                  <td id="sim-cost-current">-</td>
+                  <td id="sim-cost-sim">-</td>
+                  <td id="sim-cost-diff">-</td>
+                </tr>
+                <tr>
+                  <td>직원 수</td>
+                  <td id="sim-emp-current">-</td>
+                  <td id="sim-emp-sim">-</td>
+                  <td id="sim-emp-diff">-</td>
+                </tr>
+                <tr>
+                  <td>고객 수</td>
+                  <td id="sim-cust-current">-</td>
+                  <td id="sim-cust-sim">-</td>
+                  <td id="sim-cust-diff">-</td>
+                </tr>
+                <tr>
+                  <td>제품 수</td>
+                  <td id="sim-prod-current">-</td>
+                  <td id="sim-prod-sim">-</td>
+                  <td id="sim-prod-diff">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="form-text mt-2">
+            <b>활용 예시:</b> <span class="text-secondary">신규 제품 출시, 가격 인상, 마케팅 강화 등 다양한 전략의 재무적 효과를 시뮬레이션할 수 있습니다.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 자동 컨설팅 인사이트 & 예측 + 상세 설명 + 추가 인사이트 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-lightbulb"></i> 4. 자동 컨설팅 인사이트 & 예측</div>
+      <div class="mb-2">
+        <span class="fw-semibold">AI 기반으로 주요 경영 인사이트와 예측 결과를 자동으로 제공합니다.</span><br>
+        <span class="text-secondary">데이터 업로드 및 시나리오 적용 시 <b>위험 신호, 개선 제안, 성장 기회</b> 등 다양한 인사이트가 자동 생성됩니다.</span>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="insight-list" id="insightList">
+            <li>데이터를 업로드하면 자동 인사이트가 표시됩니다.</li>
+          </ul>
+          <div class="form-text mt-2">
+            <b>인사이트 예시:</b>
+            <ul>
+              <li>ROI가 낮을 때 비용 구조 개선 제안</li>
+              <li>고객 이탈 증가 시 충성 고객 확보 전략 제안</li>
+              <li>제품별 이익률 분석을 통한 포트폴리오 최적화</li>
+              <li>마케팅 효율성 저하 시 예산 재배분 권고</li>
+              <li>성장률 둔화 시 신규 시장 진출 제안</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="dashboard-chart">
+            <canvas id="forecastChart" height="70"></canvas>
+            <div class="small text-secondary mt-2">향후 매출 및 ROI 예측 결과를 확인할 수 있습니다.</div>
+          </div>
+          <!-- 추가: 예측 결과 상세 표 -->
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>예측 기간</th>
+                  <th>예상 매출</th>
+                  <th>예상 ROI</th>
+                </tr>
+              </thead>
+              <tbody id="forecastTableBody">
+                <tr><td colspan="3" class="text-center text-secondary">예측 결과가 여기에 표시됩니다.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 데이터 테이블 (아코디언) + 상세 설명 + 필터/검색 -->
+    <div class="accordion mb-4" id="dataAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingData">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseData" aria-expanded="false" aria-controls="collapseData">
+            <i class="fa-solid fa-table"></i> 데이터 테이블 보기
+          </button>
+        </h2>
+        <div id="collapseData" class="accordion-collapse collapse" aria-labelledby="headingData" data-bs-parent="#dataAccordion">
+          <div class="accordion-body">
+            <div class="mb-2">
+              <span class="fw-semibold">업로드한 원본 데이터를 직접 확인하고, 필터링/검색 기능을 활용해보세요.</span>
+              <span class="text-secondary">컬럼별 정렬, 키워드 검색 등 다양한 기능이 추가될 예정입니다.</span>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm align-middle" id="dataTable">
+                <thead>
+                  <tr>
+                    <th>Revenue</th>
+                    <th>Cost</th>
+                    <th>Employees</th>
+                    <th>Customers</th>
+                    <th>Inventory</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td colspan="5" class="text-center text-secondary">데이터를 업로드하세요.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-text mt-2">
+              <b>활용 팁:</b> <span class="text-secondary">특정 기간, 제품, 지역 등으로 데이터를 필터링하여 심층 분석이 가능합니다.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 분석 가이드 & 활용 예시 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-book-open"></i> 5. 분석 가이드 & 활용 예시</div>
+      <div class="mb-2">
+        <span class="fw-semibold">컨설팅 시뮬레이터를 100% 활용하는 방법!</span>
+      </div>
+      <ul>
+        <li><b>1단계:</b> <span class="text-secondary">CSV 데이터 업로드 (샘플 데이터로도 체험 가능)</span></li>
+        <li><b>2단계:</b> <span class="text-secondary">KPI 대시보드에서 주요 지표와 트렌드 확인</span></li>
+        <li><b>3단계:</b> <span class="text-secondary">시나리오 시뮬레이션으로 다양한 전략 실험</span></li>
+        <li><b>4단계:</b> <span class="text-secondary">자동 인사이트와 예측 결과로 전략적 의사결정</span></li>
+        <li><b>5단계:</b> <span class="text-secondary">원본 데이터 테이블에서 세부 내역 검토</span></li>
+      </ul>
+      <div class="mt-2">
+        <b>활용 예시:</b>
+        <ul>
+          <li>신규 제품 출시 시 예상 매출/ROI 시뮬레이션</li>
+          <li>마케팅 예산 조정에 따른 비용 구조 및 성장률 변화 분석</li>
+          <li>고객 세그먼트별 매출/이익률 분석을 통한 타겟 마케팅 전략 수립</li>
+          <li>지역별 매출 데이터를 활용한 시장 확장 전략 도출</li>
+        </ul>
+      </div>
+      <div class="form-text mt-2">
+        <b>문의/피드백:</b> <span class="text-secondary">추가 기능 요청 및 문의는 <a href="mailto:consulting@simulator.com">consulting@simulator.com</a> 으로 연락주세요.</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      &copy; 2024 Consulting Simulator &middot; All rights reserved.<br>
+      <span class="text-secondary">본 서비스는 실제 컨설팅 프로젝트에서 활용되는 분석 프레임워크를 기반으로 개발되었습니다.</span>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- PapaParse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script>
+    // --- Chart.js chart instances ---
+    let revenueCostChart, roiScenarioChart, forecastChart;
+    let monthlyRevenueChart, customerRevenueChart, employeeProductivityChart, inventoryTurnoverChart;
+    let costStructureChart, retentionRateChart;
+    // 추가 차트
+    let productRevenueChart, regionRevenueChart, marketingEffectChart, growthRateChart;
+    let customerSegmentChart, productMarginChart, newCustomerChart;
+
+    // --- Helper: Format number with commas ---
+    function formatNumber(num) {
+      if (isNaN(num)) return '-';
+      return num.toLocaleString('ko-KR');
+    }
+    function formatPercent(num) {
+      if (isNaN(num)) return '-';
+      return (num*100).toFixed(1) + '%';
+    }
+
+    // --- File Upload Handler ---
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (ext === 'csv') {
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: true,
+          complete: function(results) {
+            handleData(results.data);
+          }
+        });
+      } else {
+        alert('CSV 파일만 지원합니다. (Excel은 별도 지원 예정)');
+      }
+    });
+
+    // --- Main Data Handler ---
+    let globalData = [];
+    function handleData(data) {
+      // 필수 컬럼 체크 및 결측치 처리
+      const cols = ['Revenue','Cost','Employees','Customers','Inventory','Product','Region','Marketing','Date'];
+      data = data.map(row => {
+        let newRow = {};
+        cols.forEach(col => {
+          newRow[col] = Number(row[col]) || row[col] || 0;
+        });
+        return newRow;
+      });
+      globalData = data;
+      updateTable(data);
+      updateKPIs(data);
+      updateCharts(data);
+      updateInsights(data);
+    }
+
+    // --- Update Data Table ---
+    function updateTable(data) {
+      const tbody = document.querySelector('#dataTable tbody');
+      tbody.innerHTML = '';
+      if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-secondary">데이터를 업로드하세요.</td></tr>';
+        return;
+      }
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${formatNumber(row.Revenue)}</td>
+                        <td>${formatNumber(row.Cost)}</td>
+                        <td>${formatNumber(row.Employees)}</td>
+                        <td>${formatNumber(row.Customers)}</td>
+                        <td>${formatNumber(row.Inventory)}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- Update KPI Cards ---
+    function updateKPIs(data) {
+      let revenue = data.reduce((a,b)=>a+Number(b.Revenue),0);
+      let cost = data.reduce((a,b)=>a+Number(b.Cost),0);
+      let employees = data.reduce((a,b)=>a+Number(b.Employees),0);
+      let roi = cost ? (revenue-cost)/cost : 0;
+      let revEmp = employees ? revenue/employees : 0;
+      let margin = revenue ? (revenue-cost)/revenue : 0;
+
+      document.getElementById('kpi-revenue').innerText = formatNumber(revenue) + ' 원';
+      document.getElementById('kpi-roi').innerText = formatPercent(roi);
+      document.getElementById('kpi-rev-emp').innerText = formatNumber(revEmp) + ' 원';
+      document.getElementById('kpi-margin').innerText = formatPercent(margin);
+
+      // 시뮬레이션도 업데이트
+      updateSimulation();
+    }
+
+    // --- Update Main Charts & 다양한 대시보드 ---
+    function updateCharts(data) {
+      // Revenue vs Cost Chart
+      const labels = data.map((_,i)=>`Entry ${i+1}`);
+      const revenueArr = data.map(r=>Number(r.Revenue));
+      const costArr = data.map(r=>Number(r.Cost));
+
+      if (revenueCostChart) revenueCostChart.destroy();
+      const ctx1 = document.getElementById('revenueCostChart').getContext('2d');
+      revenueCostChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Revenue', data: revenueArr, backgroundColor: 'rgba(59,130,246,0.7)' },
+            { label: 'Cost', data: costArr, backgroundColor: 'rgba(99,102,241,0.7)' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          animation: { duration: 1200, easing: 'easeOutQuart' }
+        }
+      });
+
+      // --- 월별 매출 추이 (임의 그룹핑) ---
+      if (monthlyRevenueChart) monthlyRevenueChart.destroy();
+      const ctx2 = document.getElementById('monthlyRevenueChart').getContext('2d');
+      let monthLabels = ['1월','2월','3월','4월','5월','6월'];
+      let monthData = Array(monthLabels.length).fill(0);
+      data.forEach((row,i)=>{
+        monthData[i%monthLabels.length] += Number(row.Revenue);
+      });
+      monthlyRevenueChart = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: monthLabels,
+          datasets: [
+            { label: '월별 매출', data: monthData, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', tension:0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 고객별 매출 분포 (임의 분포) ---
+      if (customerRevenueChart) customerRevenueChart.destroy();
+      const ctx3 = document.getElementById('customerRevenueChart').getContext('2d');
+      let customerMap = {};
+      data.forEach(row=>{
+        let cust = row.Customers || '기타';
+        customerMap[cust] = (customerMap[cust]||0) + Number(row.Revenue);
+      });
+      let custLabels = Object.keys(customerMap);
+      let custData = Object.values(customerMap);
+      customerRevenueChart = new Chart(ctx3, {
+        type: 'pie',
+        data: {
+          labels: custLabels,
+          datasets: [
+            { label: '고객별 매출', data: custData, backgroundColor: ['#6366f1','#3b82f6','#60a5fa','#a5b4fc','#c7d2fe','#fbbf24','#f87171'] }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 직원 생산성 (직원 1인당 매출) ---
+      if (employeeProductivityChart) employeeProductivityChart.destroy();
+      const ctx4 = document.getElementById('employeeProductivityChart').getContext('2d');
+      let empLabels = data.map((_,i)=>`Entry ${i+1}`);
+      let empData = data.map(row=>row.Employees?Number(row.Revenue)/Number(row.Employees):0);
+      employeeProductivityChart = new Chart(ctx4, {
+        type: 'bar',
+        data: {
+          labels: empLabels,
+          datasets: [
+            { label: '직원 1인당 매출', data: empData, backgroundColor: '#6366f1' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 재고 회전율 (Inventory Turnover) ---
+      if (inventoryTurnoverChart) inventoryTurnoverChart.destroy();
+      const ctx5 = document.getElementById('inventoryTurnoverChart').getContext('2d');
+      let invLabels = data.map((_,i)=>`Entry ${i+1}`);
+      let invData = data.map(row=>row.Inventory?Number(row.Revenue)/Number(row.Inventory):0);
+      inventoryTurnoverChart = new Chart(ctx5, {
+        type: 'line',
+        data: {
+          labels: invLabels,
+          datasets: [
+            { label: '재고 회전율', data: invData, borderColor: '#60a5fa', backgroundColor: 'rgba(96,165,250,0.1)', tension:0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 비용 구조 분석 (Cost Structure) ---
+      if (costStructureChart) costStructureChart.destroy();
+      const ctx6 = document.getElementById('costStructureChart').getContext('2d');
+      let totalCost = data.reduce((a,b)=>a+Number(b.Cost),0);
+      let totalRevenue = data.reduce((a,b)=>a+Number(b.Revenue),0);
+      let costRatio = totalRevenue ? totalCost/totalRevenue : 0;
+      costStructureChart = new Chart(ctx6, {
+        type: 'doughnut',
+        data: {
+          labels: ['비용', '이익'],
+          datasets: [{
+            data: [totalCost, totalRevenue-totalCost],
+            backgroundColor: ['#f87171','#34d399']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 고객 유지율 추이 (Retention Rate) ---
+      if (retentionRateChart) retentionRateChart.destroy();
+      const ctx7 = document.getElementById('retentionRateChart').getContext('2d');
+      let retentionLabels = ['1분기','2분기','3분기','4분기'];
+      let retentionData = [100, 90, 85, 80].map((v,i)=>data.length ? (data[i%data.length].Customers/100) : 0);
+      retentionRateChart = new Chart(ctx7, {
+        type: 'line',
+        data: {
+          labels: retentionLabels,
+          datasets: [
+            { label: '고객 유지율', data: retentionData, borderColor: '#fbbf24', backgroundColor: 'rgba(251,191,36,0.1)', tension:0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { min: 0, max: 1, ticks: { callback: v=>(v*100).toFixed(0)+'%' } } }
+        }
+      });
+
+      // --- 추가 대시보드: 제품별 매출 ---
+      if (productRevenueChart) productRevenueChart.destroy();
+      const ctx8 = document.getElementById('productRevenueChart').getContext('2d');
+      let productMap = {};
+      data.forEach(row=>{
+        let prod = row.Product || '기타';
+        productMap[prod] = (productMap[prod]||0) + Number(row.Revenue);
+      });
+      let prodLabels = Object.keys(productMap);
+      let prodData = Object.values(productMap);
+      productRevenueChart = new Chart(ctx8, {
+        type: 'bar',
+        data: {
+          labels: prodLabels,
+          datasets: [
+            { label: '제품별 매출', data: prodData, backgroundColor: '#a5b4fc' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 추가 대시보드: 지역별 매출 ---
+      if (regionRevenueChart) regionRevenueChart.destroy();
+      const ctx9 = document.getElementById('regionRevenueChart').getContext('2d');
+      let regionMap = {};
+      data.forEach(row=>{
+        let region = row.Region || '기타';
+        regionMap[region] = (regionMap[region]||0) + Number(row.Revenue);
+      });
+      let regionLabels = Object.keys(regionMap);
+      let regionData = Object.values(regionMap);
+      regionRevenueChart = new Chart(ctx9, {
+        type: 'pie',
+        data: {
+          labels: regionLabels,
+          datasets: [
+            { label: '지역별 매출', data: regionData, backgroundColor: ['#6366f1','#3b82f6','#60a5fa','#a5b4fc','#fbbf24','#f87171'] }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 추가 대시보드: 마케팅 효과 분석 ---
+      if (marketingEffectChart) marketingEffectChart.destroy();
+      const ctx10 = document.getElementById('marketingEffectChart').getContext('2d');
+      let marketingArr = data.map(r=>Number(r.Marketing)||0);
+      marketingEffectChart = new Chart(ctx10, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: '마케팅비 vs 매출',
+            data: data.map(r=>({x:Number(r.Marketing)||0, y:Number(r.Revenue)||0})),
+            backgroundColor: '#3b82f6'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          scales: {
+            x: { title: { display: true, text: '마케팅비' } },
+            y: { title: { display: true, text: '매출' } }
+          }
+        }
+      });
+
+      // --- 추가 대시보드: 성장률 추이 ---
+      if (growthRateChart) growthRateChart.destroy();
+      const ctx11 = document.getElementById('growthRateChart').getContext('2d');
+      let growthData = [];
+      for(let i=1;i<data.length;i++){
+        let prev = Number(data[i-1].Revenue)||0;
+        let curr = Number(data[i].Revenue)||0;
+        growthData.push(prev?((curr-prev)/prev):0);
+      }
+      growthRateChart = new Chart(ctx11, {
+        type: 'line',
+        data: {
+          labels: data.slice(1).map((_,i)=>`기간${i+2}`),
+          datasets: [
+            { label: '성장률', data: growthData, borderColor: '#34d399', backgroundColor: 'rgba(52,211,153,0.1)', tension:0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { min: -1, max: 1, ticks: { callback: v=>(v*100).toFixed(0)+'%' } } }
+        }
+      });
+
+      // --- 추가 대시보드: 고객 세그먼트 ---
+      if (customerSegmentChart) customerSegmentChart.destroy();
+      const ctx12 = document.getElementById('customerSegmentChart').getContext('2d');
+      let segMap = {};
+      data.forEach(row=>{
+        let seg = row.Segment || '기타';
+        segMap[seg] = (segMap[seg]||0) + Number(row.Revenue);
+      });
+      let segLabels = Object.keys(segMap);
+      let segData = Object.values(segMap);
+      customerSegmentChart = new Chart(ctx12, {
+        type: 'bar',
+        data: {
+          labels: segLabels,
+          datasets: [
+            { label: '고객 세그먼트별 매출', data: segData, backgroundColor: '#fbbf24' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 추가 대시보드: 제품별 이익률 ---
+      if (productMarginChart) productMarginChart.destroy();
+      const ctx13 = document.getElementById('productMarginChart').getContext('2d');
+      let prodMarginMap = {};
+      data.forEach(row=>{
+        let prod = row.Product || '기타';
+        let margin = Number(row.Revenue)-Number(row.Cost);
+        prodMarginMap[prod] = (prodMarginMap[prod]||0) + margin;
+      });
+      let prodMarginLabels = Object.keys(prodMarginMap);
+      let prodMarginData = Object.values(prodMarginMap);
+      productMarginChart = new Chart(ctx13, {
+        type: 'bar',
+        data: {
+          labels: prodMarginLabels,
+          datasets: [
+            { label: '제품별 이익', data: prodMarginData, backgroundColor: '#f87171' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+
+      // --- 추가 대시보드: 월별 신규 고객 ---
+      if (newCustomerChart) newCustomerChart.destroy();
+      const ctx14 = document.getElementById('newCustomerChart').getContext('2d');
+      let newCustLabels = monthLabels;
+      let newCustData = Array(monthLabels.length).fill(0);
+      data.forEach((row,i)=>{
+        newCustData[i%monthLabels.length] += Number(row.Customers);
+      });
+      newCustomerChart = new Chart(ctx14, {
+        type: 'line',
+        data: {
+          labels: newCustLabels,
+          datasets: [
+            { label: '월별 신규 고객', data: newCustData, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.1)', tension:0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } }
+        }
+      });
+    }
+
+    // --- Scenario Simulation ---
+    document.getElementById('marketingRange').addEventListener('input', updateSimulation);
+    document.getElementById('employeeInput').addEventListener('input', updateSimulation);
+    document.getElementById('priceRange').addEventListener('input', updateSimulation);
+    document.getElementById('newCustomerInput').addEventListener('input', updateSimulation);
+    document.getElementById('productInput').addEventListener('input', updateSimulation);
+
+    function updateSimulation() {
+      if (!globalData.length) {
+        document.getElementById('sim-cost').innerText = '-';
+        document.getElementById('sim-roi').innerText = '-';
+        document.getElementById('sim-roi-diff').innerText = '-';
+        if (roiScenarioChart) roiScenarioChart.destroy();
+        updateForecast([]);
+        return;
+      }
+      let revenue = globalData.reduce((a,b)=>a+Number(b.Revenue),0);
+      let cost = globalData.reduce((a,b)=>a+Number(b.Cost),0);
+      let employees = globalData.reduce((a,b)=>a+Number(b.Employees),0);
+
+      let marketingInc = Number(document.getElementById('marketingRange').value);
+      let addEmp = Number(document.getElementById('employeeInput').value);
+      let priceAdj = Number(document.getElementById('priceRange').value) / 100;
+      let newCust = Number(document.getElementById('newCustomerInput').value);
+      let newProd = Number(document.getElementById('productInput').value);
+
+      // 시뮬레이션 매출/비용 계산 (단순 모델)
+      let simRevenue = revenue * (1 + marketingInc/100) + newCust * 10000;
+      let simCost = cost + cost*(marketingInc/100) + addEmp*5000;
+      let roi = cost ? (revenue-cost)/cost : 0;
+      let simRoi = simCost ? (simRevenue-simCost)/simCost : 0;
+      let roiDiff = simRoi - roi;
+
+      document.getElementById('sim-cost').innerText = formatNumber(simCost) + ' 원';
+      document.getElementById('sim-roi').innerText = formatPercent(simRoi);
+      document.getElementById('sim-roi-diff').innerText = (roiDiff>=0?'+':'') + formatPercent(roiDiff);
+
+      // ROI Scenario Chart
+      if (roiScenarioChart) roiScenarioChart.destroy();
+      const ctx2 = document.getElementById('roiScenarioChart').getContext('2d');
+      roiScenarioChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['현재 ROI', '시뮬레이션 ROI'],
+          datasets: [{
+            label: 'ROI',
+            data: [roi, simRoi],
+            backgroundColor: ['#6366f1','#3b82f6']
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          plugins: { legend: { display: false } },
+          scales: { x: { min: -1, max: 1, ticks: { callback: v=>(v*100).toFixed(0)+'%' } } }
+        }
+      });
+
+      // Forecast도 업데이트
+      updateForecast([revenue, simCost]);
+      updateInsights(globalData, roi, simRoi, marketingInc, employees, revenue);
+    }
+
+    // --- Forecast Chart ---
+    function updateForecast([revenue, simCost]) {
+      if (!revenue || !simCost) {
+        if (forecastChart) forecastChart.destroy();
+        return;
+      }
+      let periods = 3;
+      let revenueForecast = Array.from({length:periods}, (_,i)=>revenue*(1+0.05*(i+1)));
+      let roiForecast = revenueForecast.map(rf=>(rf-simCost)/simCost);
+
+      if (forecastChart) forecastChart.destroy();
+      const ctx3 = document.getElementById('forecastChart').getContext('2d');
+      forecastChart = new Chart(ctx3, {
+        type: 'line',
+        data: {
+          labels: ['Period 1','Period 2','Period 3'],
+          datasets: [
+            { label: 'Revenue Forecast', data: revenueForecast, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', yAxisID:'y' },
+            { label: 'ROI Forecast', data: roiForecast, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.1)', yAxisID:'y1' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top' } },
+          scales: {
+            y: { type:'linear', position:'left', title:{display:true,text:'Revenue'} },
+            y1: { type:'linear', position:'right', title:{display:true,text:'ROI'}, min:-1, max:1, ticks:{callback:v=>(v*100).toFixed(0)+'%'} }
+          }
+        }
+      });
+    }
+
+    // --- Automated Insights ---
+    function updateInsights(data, roi, simRoi, marketingInc, employees, revenue) {
+      const ul = document.getElementById('insightList');
+      ul.innerHTML = '';
+      if (!data.length) {
+        ul.innerHTML = '<li>데이터를 업로드하면 자동 인사이트가 표시됩니다.</li>';
+        return;
+      }
+      let revEmp = employees ? revenue/employees : 0;
+      let margin = revenue ? (revenue-data.reduce((a,b)=>a+b.Cost,0))/revenue : 0;
+      let insights = [];
+      if (roi < 0.1) insights.push('ROI가 10% 미만입니다. 비용 최적화 또는 효율성 개선을 권장합니다.');
+      if (revEmp < 50000) insights.push('직원 1인당 매출이 낮습니다. 업무 프로세스 개선 또는 교육을 고려하세요.');
+      if (marketingInc > 20) insights.push('마케팅 예산이 과도하게 증가했습니다. 기대 매출 증가와의 정합성을 검토하세요.');
+      if (margin < 0.15) insights.push('이익률이 15% 미만입니다. 가격 정책 또는 변동비 절감을 검토하세요.');
+      if (simRoi > roi) insights.push('시뮬레이션 결과 ROI가 개선됩니다. 변경안의 실행 가능성을 검토하세요.');
+      if (!insights.length) insights.push('모든 주요 지표가 양호합니다. 현재 전략을 유지하세요.');
+      insights.forEach(txt=>{
+        const li = document.createElement('li');
+        li.innerText = txt;
+        ul.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
