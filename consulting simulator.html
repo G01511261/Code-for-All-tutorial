@@ -12,335 +12,547 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
   <style>
     body {
-      background: linear-gradient(135deg, #f8fafc 0%, #e5e7eb 100%);
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
       min-height: 100vh;
       font-family: 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', Arial, sans-serif;
       color: #1f2937;
+      position: relative;
+      overflow-x: hidden;
     }
+    
+    /* Animated Background Elements */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+      animation: backgroundShift 15s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    @keyframes backgroundShift {
+      0% { transform: translateX(-20px) translateY(-10px) scale(1); }
+      100% { transform: translateX(20px) translateY(10px) scale(1.02); }
+    }
+
     .hero {
-      background: linear-gradient(135deg, #111827 0%, #374151 100%);
+      background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #374151 100%);
       color: #ffffff;
-      border-radius: 1.5rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      margin-bottom: 2.5rem;
-      padding: 3rem 2.5rem;
+      border-radius: 2rem;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      margin-bottom: 3rem;
+      padding: 3.5rem 3rem;
       position: relative;
       overflow: hidden;
     }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.03) 50%, transparent 51%);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
     .hero::after {
       content: '';
       position: absolute;
-      right: -100px; top: -100px;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      z-index: 0;
-      animation: float 8s ease-in-out infinite alternate;
+      right: -100px; 
+      top: -100px;
+      width: 400px; 
+      height: 400px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+      animation: float 10s ease-in-out infinite alternate;
     }
+    
     @keyframes float {
-      0% { transform: translateY(0) rotate(0deg);}
-      100% { transform: translateY(20px) rotate(10deg);}
+      0% { transform: translateY(0) rotate(0deg) scale(1); }
+      100% { transform: translateY(30px) rotate(15deg) scale(1.1); }
     }
+
     .hero h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 3.5rem;
+      font-weight: 900;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #e5e7eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 2;
     }
+    
     .hero .subtitle {
-      font-size: 1.25rem;
+      font-size: 1.375rem;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       color: #d1d5db;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      position: relative;
+      z-index: 2;
     }
+    
     .hero .description {
-      font-size: 1.1rem;
+      font-size: 1.125rem;
       font-weight: 400;
       color: #e5e7eb;
-      line-height: 1.6;
+      line-height: 1.7;
+      position: relative;
+      z-index: 2;
     }
+
     .section-box {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-      padding: 2.5rem 2rem;
-      margin-bottom: 2.5rem;
-      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 2rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 3rem 2.5rem;
+      margin-bottom: 3rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
     }
-    .section-box:hover {
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
-      border-color: #d1d5db;
+    
+    .section-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
     }
+    
+    .section-box:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .section-box:hover {
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      transform: translateY(-5px);
+      border-color: #cbd5e1;
+      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    }
+
     .section-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 1.5rem;
+      font-size: 1.75rem;
+      font-weight: 900;
+      margin-bottom: 2rem;
       color: #111827;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.05em;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      gap: 1rem;
+      position: relative;
     }
+    
     .section-title i {
-      color: #6b7280;
-      font-size: 1.25rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.5rem;
+      filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.3));
     }
+
     .primary-text {
-      font-size: 1.125rem;
-      font-weight: 600;
+      font-size: 1.25rem;
+      font-weight: 700;
       color: #111827;
-      margin-bottom: 0.5rem;
-      line-height: 1.4;
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
     }
+
     .secondary-text {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    .tertiary-text {
       font-size: 1rem;
       font-weight: 400;
       color: #6b7280;
       line-height: 1.5;
     }
-    .tertiary-text {
-      font-size: 0.875rem;
-      font-weight: 400;
-      color: #9ca3af;
-      line-height: 1.4;
-    }
+
     .kpi-card {
-      border-radius: 1.25rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-      background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-      min-height: 160px;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      min-height: 180px;
       position: relative;
       overflow: hidden;
       cursor: pointer;
-      animation: fadeInUp 1s;
-      border: 1px solid #e5e7eb;
+      border: 1px solid #e2e8f0;
     }
+    
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #3b82f6, #06b6d4);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .kpi-card:hover::before {
+      transform: scaleX(1);
+    }
+    
     .kpi-card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-      background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
-      border-color: #d1d5db;
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      border-color: #cbd5e1;
     }
+
     .kpi-label {
-      font-size: 1rem;
-      color: #6b7280;
-      font-weight: 600;
+      font-size: 1.125rem;
+      color: #4b5563;
+      font-weight: 700;
       letter-spacing: -0.025em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
+
     .kpi-value {
-      font-size: 2.25rem;
+      font-size: 2.5rem;
       font-weight: 900;
-      color: #111827;
-      margin-top: 0.5rem;
-      transition: color 0.3s;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      background: linear-gradient(135deg, #111827, #374151);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 0.75rem;
+      transition: all 0.3s ease;
     }
+    
     .kpi-card:hover .kpi-value {
-      color: #374151;
+      transform: scale(1.05);
     }
+
     .kpi-description {
-      font-size: 0.75rem;
-      color: #9ca3af;
-      margin-top: 0.5rem;
-      line-height: 1.3;
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-top: 0.75rem;
+      line-height: 1.4;
     }
+
     .nav-tabs {
-      border-bottom: 2px solid #e5e7eb;
-      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #e2e8f0;
+      margin-bottom: 2rem;
       flex-wrap: wrap;
+      background: linear-gradient(90deg, #f8fafc, #f1f5f9);
+      border-radius: 1rem 1rem 0 0;
+      padding: 0.5rem 1rem 0;
     }
+
     .nav-tabs .nav-link {
       border: none;
       color: #6b7280;
-      font-weight: 500;
-      font-size: 0.875rem;
-      padding: 0.75rem 1rem;
-      margin-bottom: -2px;
-      white-space: nowrap;
-      transition: all 0.2s;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 1rem 1.5rem;
+      margin: 0 0.25rem -3px 0.25rem;
+      border-radius: 0.75rem 0.75rem 0 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .nav-tabs .nav-link::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
     .nav-tabs .nav-link.active {
-      background: transparent;
-      border-bottom: 2px solid #111827;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
       color: #111827;
-      font-weight: 700;
+      font-weight: 800;
+      box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
     }
+    
+    .nav-tabs .nav-link.active::before {
+      transform: scaleX(1);
+    }
+
     .nav-tabs .nav-link:hover {
       color: #374151;
-      border-color: transparent;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      transform: translateY(-1px);
     }
+
     .dashboard-chart {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 1.25rem;
-      padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      margin-bottom: 1.5rem;
-      min-height: 300px;
-      animation: fadeIn 1.2s;
-    }
-    .chart-description {
-      font-size: 0.875rem;
-      color: #6b7280;
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid #f3f4f6;
-    }
-    .insight-list li {
-      margin-bottom: 1rem;
-      font-size: 1rem;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+      margin-bottom: 2rem;
+      min-height: 350px;
+      transition: all 0.3s ease;
       position: relative;
-      padding-left: 2rem;
-      animation: fadeInLeft 0.8s;
-      color: #374151;
-      line-height: 1.5;
+      overflow: hidden;
     }
+    
+    .dashboard-chart::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .dashboard-chart:hover::before {
+      opacity: 1;
+    }
+    
+    .dashboard-chart:hover {
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .chart-container {
+      position: relative;
+      height: 280px;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-title {
+      font-size: 1.375rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #111827, #374151);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .chart-description {
+      font-size: 0.95rem;
+      color: #6b7280;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      line-height: 1.6;
+    }
+
+    .insight-list li {
+      margin-bottom: 1.5rem;
+      font-size: 1.125rem;
+      position: relative;
+      padding-left: 2.5rem;
+      color: #374151;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+    }
+    
     .insight-list li::before {
       content: "●";
       position: absolute;
-      left: 0.5rem;
-      top: 0;
-      color: #111827;
-      font-size: 1.25rem;
+      left: 0.75rem;
+      top: 0.1rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.5rem;
+      animation: pulse 2s infinite;
     }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+    
+    .insight-list li:hover {
+      transform: translateX(5px);
+      color: #111827;
+    }
+
     .simulator-controls label {
-      font-weight: 600;
+      font-weight: 700;
       color: #111827;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.125rem;
+      margin-bottom: 0.75rem;
     }
+
     .simulator-controls .form-range {
-      accent-color: #111827;
+      accent-color: #3b82f6;
+      height: 8px;
     }
+
     .simulator-controls .form-control {
-      border: 2px solid #e5e7eb;
-      border-radius: 0.75rem;
-      font-weight: 500;
+      border: 2px solid #e2e8f0;
+      border-radius: 1rem;
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      transition: all 0.3s ease;
     }
+
     .simulator-controls .form-control:focus {
-      border-color: #111827;
-      box-shadow: 0 0 0 0.2rem rgba(17,24,39,0.1);
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.15);
+      transform: scale(1.02);
     }
+
     .badge {
-      font-size: 0.875rem;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0.75rem 1.25rem;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      animation: badgePulse 2s ease-in-out infinite;
     }
-    .bg-primary {
-      background-color: #111827 !important;
+    
+    @keyframes badgePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
+
     .bg-success {
-      background-color: #374151 !important;
+      background: linear-gradient(135deg, #10b981, #059669) !important;
     }
+
     .accordion-button {
-      background-color: #f9fafb;
-      border: 1px solid #e5e7eb;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1px solid #e2e8f0;
       color: #111827;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 1.125rem;
+      padding: 1.5rem 2rem;
     }
+
     .accordion-button:not(.collapsed) {
       color: #111827;
-      background-color: #ffffff;
-      border-color: #d1d5db;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-color: #cbd5e1;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
+
     .table {
-      border: 1px solid #e5e7eb;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+      overflow: hidden;
     }
+
     .table th {
-      background-color: #f9fafb;
-      border-color: #e5e7eb;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-color: #e2e8f0;
       color: #111827;
-      font-weight: 600;
+      font-weight: 800;
+      padding: 1.25rem 1rem;
     }
+
     .table td {
       border-color: #f3f4f6;
       color: #374151;
+      padding: 1rem;
+      font-weight: 500;
     }
+
     .btn-outline-primary {
-      border-color: #111827;
-      color: #111827;
+      border: 2px solid #3b82f6;
+      color: #3b82f6;
+      font-weight: 700;
+      padding: 0.75rem 2rem;
+      border-radius: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     .btn-outline-primary:hover {
-      background-color: #111827;
-      border-color: #111827;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
     }
+
     .footer {
-      margin-top: 4rem;
+      margin-top: 5rem;
       color: #6b7280;
-      font-size: 0.875rem;
+      font-size: 1rem;
       text-align: center;
-      padding: 2rem 0;
-      border-top: 1px solid #e5e7eb;
+      padding: 3rem 0;
+      border-top: 2px solid #e2e8f0;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     }
+
     .fade-in-delay-1 { animation-delay: 0.2s; }
     .fade-in-delay-2 { animation-delay: 0.4s; }
     .fade-in-delay-3 { animation-delay: 0.6s; }
     .fade-in-delay-4 { animation-delay: 0.8s; }
-    
-    /* Responsive adjustments */
+    .fade-in-delay-5 { animation-delay: 1.0s; }
+
+    /* Enhanced Responsive Design */
     @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2rem;
-      }
-      .section-box { 
-        padding: 1.5rem 1rem; 
-      }
-      .hero { 
-        padding: 2rem 1.5rem; 
-      }
-      .dashboard-chart { 
-        padding: 1rem; 
-        min-height: 250px;
-      }
-      .nav-tabs .nav-link {
-        font-size: 0.75rem;
-        padding: 0.5rem 0.75rem;
-      }
-      .kpi-value {
-        font-size: 1.75rem;
-      }
+      .hero h1 { font-size: 2.5rem; }
+      .section-box { padding: 2rem 1.5rem; }
+      .hero { padding: 2.5rem 2rem; }
+      .dashboard-chart { padding: 1.5rem; min-height: 280px; }
+      .nav-tabs .nav-link { font-size: 0.8rem; padding: 0.75rem 1rem; }
+      .kpi-value { font-size: 2rem; }
+      .chart-container { height: 220px; }
     }
     
-    /* Chart container improvements */
-    .chart-container {
-      position: relative;
-      height: 250px;
-      margin-bottom: 1rem;
+    /* Advanced Animation Classes */
+    @keyframes slideInUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     
-    .chart-title {
-      font-size: 1.125rem;
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 1rem;
-      text-align: center;
+    @keyframes fadeInScale {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    .animate-slide-up {
+      animation: slideInUp 0.8s ease-out forwards;
+    }
+    
+    .animate-fade-scale {
+      animation: fadeInScale 0.6s ease-out forwards;
     }
   </style>
 </head>
 <body>
-  <div class="container py-4">
+  <div class="container py-5">
     <!-- Hero Section -->
     <div class="hero animate__animated animate__fadeInDown">
       <h1><i class="fa-solid fa-chart-line"></i> Consulting Simulator</h1>
-      <div class="subtitle">데이터 기반 의사결정 • KPI 분석 • 시나리오 시뮬레이션</div>
+      <div class="subtitle">데이터 기반 의사결정 • KPI 분석 • 시나리오 시뮬레이션 • AI 인사이트</div>
       <div class="description">
         <strong>비즈니스 데이터를 업로드하고, 실시간 대시보드와 자동 인사이트를 경험하세요.</strong><br>
         컨설팅 시뮬레이터는 다양한 경영 데이터를 시각화하고, 시나리오별 결과를 예측하여 실제 컨설팅 프로젝트처럼 전략적 의사결정을 지원합니다.
@@ -351,16 +563,16 @@
     <div class="section-box animate__animated animate__fadeInUp">
       <div class="section-title"><i class="fa-solid fa-upload"></i> 데이터 파일 업로드</div>
       <div class="primary-text">분석하고자 하는 비즈니스 데이터를 업로드하세요.</div>
-      <div class="secondary-text mb-3">CSV 파일만 지원합니다. (Excel은 별도 지원 예정)</div>
+      <div class="secondary-text mb-4">CSV 파일만 지원합니다. (Excel은 별도 지원 예정)</div>
       
       <form>
-        <div class="mb-3">
+        <div class="mb-4">
           <label for="fileInput" class="form-label primary-text">CSV 파일 업로드</label>
-          <div class="tertiary-text mb-2">예: Revenue, Cost, Employees, Customers, Inventory 등 컬럼 포함</div>
+          <div class="tertiary-text mb-3">예: Revenue, Cost, Employees, Customers, Inventory 등 컬럼 포함</div>
           <input class="form-control" type="file" id="fileInput" accept=".csv">
         </div>
         
-        <div class="mb-3">
+        <div class="mb-4">
           <a href="#" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-download"></i> 샘플 데이터 다운로드</a>
         </div>
         
@@ -376,29 +588,29 @@
       <div class="primary-text">주요 경영 지표를 한눈에 확인하세요.</div>
       <div class="secondary-text mb-4">업로드한 데이터 기반으로 매출, 비용, ROI, 이익률, 직원 생산성 등 핵심 KPI가 자동 계산됩니다.</div>
       
-      <div class="row g-4 mb-4">
-        <div class="col-6 col-md-3">
+      <div class="row g-4 mb-5">
+        <div class="col-6 col-lg-3">
           <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-1">
             <div class="kpi-label"><i class="fa-solid fa-sack-dollar"></i> 총 매출</div>
             <div class="kpi-value" id="kpi-revenue">-</div>
             <div class="kpi-description">전체 기간 총 매출액</div>
           </div>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-lg-3">
           <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-2">
             <div class="kpi-label"><i class="fa-solid fa-percent"></i> ROI</div>
             <div class="kpi-value" id="kpi-roi">-</div>
             <div class="kpi-description">투자 대비 수익률</div>
           </div>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-lg-3">
           <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-3">
             <div class="kpi-label"><i class="fa-solid fa-user-group"></i> 직원당 매출</div>
             <div class="kpi-value" id="kpi-rev-emp">-</div>
             <div class="kpi-description">직원 1인 평균 매출</div>
           </div>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-lg-3">
           <div class="kpi-card text-center p-3 animate__animated animate__fadeInUp fade-in-delay-4">
             <div class="kpi-label"><i class="fa-solid fa-chart-pie"></i> 이익률</div>
             <div class="kpi-value" id="kpi-margin">-</div>
@@ -407,8 +619,8 @@
         </div>
       </div>
 
-      <div class="primary-text mb-3"><i class="fa-solid fa-chart-bar"></i> 데이터 시각화 대시보드</div>
-      <div class="secondary-text mb-3">다양한 관점에서 데이터를 분석하고 시각화 결과를 확인하세요.</div>
+      <div class="primary-text mb-3"><i class="fa-solid fa-chart-bar"></i> 고급 데이터 시각화 대시보드</div>
+      <div class="secondary-text mb-4">11가지 다양한 관점에서 데이터를 분석하고 시각화 결과를 확인하세요.</div>
       
       <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -429,6 +641,21 @@
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="tab6-tab" data-bs-toggle="tab" data-bs-target="#tab6" type="button" role="tab">비용 구조</button>
         </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab7-tab" data-bs-toggle="tab" data-bs-target="#tab7" type="button" role="tab">지역별 성과</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab8-tab" data-bs-toggle="tab" data-bs-target="#tab8" type="button" role="tab">제품별 수익성</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab9-tab" data-bs-toggle="tab" data-bs-target="#tab9" type="button" role="tab">마케팅 ROI</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab10-tab" data-bs-toggle="tab" data-bs-target="#tab10" type="button" role="tab">계절성 분석</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab11-tab" data-bs-toggle="tab" data-bs-target="#tab11" type="button" role="tab">성장률 분석</button>
+        </li>
       </ul>
       
       <div class="tab-content" id="dashboardTabsContent">
@@ -443,6 +670,7 @@
             </div>
           </div>
         </div>
+        
         <div class="tab-pane fade" id="tab2" role="tabpanel">
           <div class="dashboard-chart">
             <div class="chart-title">월별 매출 추이 분석</div>
@@ -454,6 +682,7 @@
             </div>
           </div>
         </div>
+        
         <div class="tab-pane fade" id="tab3" role="tabpanel">
           <div class="dashboard-chart">
             <div class="chart-title">고객별 매출 분포</div>
@@ -465,6 +694,7 @@
             </div>
           </div>
         </div>
+        
         <div class="tab-pane fade" id="tab4" role="tabpanel">
           <div class="dashboard-chart">
             <div class="chart-title">직원 생산성 분석</div>
@@ -476,6 +706,7 @@
             </div>
           </div>
         </div>
+        
         <div class="tab-pane fade" id="tab5" role="tabpanel">
           <div class="dashboard-chart">
             <div class="chart-title">재고 회전율 분석</div>
@@ -487,6 +718,7 @@
             </div>
           </div>
         </div>
+        
         <div class="tab-pane fade" id="tab6" role="tabpanel">
           <div class="dashboard-chart">
             <div class="chart-title">비용 구조 분석</div>
@@ -495,6 +727,66 @@
             </div>
             <div class="chart-description">
               비용 구조를 시각화하여 고정비/변동비 비중을 파악하세요. 도넛 차트로 비용과 이익의 비율을 명확히 표시합니다.
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-pane fade" id="tab7" role="tabpanel">
+          <div class="dashboard-chart">
+            <div class="chart-title">지역별 성과 분석</div>
+            <div class="chart-container">
+              <canvas id="regionPerformanceChart"></canvas>
+            </div>
+            <div class="chart-description">
+              지역별 매출 성과를 비교하여 시장 확장 전략을 수립하세요. 막대차트로 지역간 성과 차이를 명확히 확인할 수 있습니다.
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-pane fade" id="tab8" role="tabpanel">
+          <div class="dashboard-chart">
+            <div class="chart-title">제품별 수익성 분석</div>
+            <div class="chart-container">
+              <canvas id="productProfitabilityChart"></canvas>
+            </div>
+            <div class="chart-description">
+              제품별 매출과 이익률을 동시에 분석하여 핵심 제품을 식별하세요. 버블차트로 매출 규모와 수익성을 함께 표현합니다.
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-pane fade" id="tab9" role="tabpanel">
+          <div class="dashboard-chart">
+            <div class="chart-title">마케팅 ROI 분석</div>
+            <div class="chart-container">
+              <canvas id="marketingROIChart"></canvas>
+            </div>
+            <div class="chart-description">
+              마케팅 비용 대비 매출 증가를 분석하여 마케팅 효율성을 평가하세요. 선형 차트로 마케팅 투자 효과를 추적합니다.
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-pane fade" id="tab10" role="tabpanel">
+          <div class="dashboard-chart">
+            <div class="chart-title">계절성 분석</div>
+            <div class="chart-container">
+              <canvas id="seasonalityChart"></canvas>
+            </div>
+            <div class="chart-description">
+              월별/분기별 매출 패턴을 분석하여 계절성 요인을 파악하세요. 레이더 차트로 계절별 특성을 시각화합니다.
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-pane fade" id="tab11" role="tabpanel">
+          <div class="dashboard-chart">
+            <div class="chart-title">성장률 분석</div>
+            <div class="chart-container">
+              <canvas id="growthRateChart"></canvas>
+            </div>
+            <div class="chart-description">
+              전월 대비, 전년 대비 성장률을 분석하여 비즈니스 성장 추이를 파악하세요. 복합 차트로 다양한 성장 지표를 표현합니다.
             </div>
           </div>
         </div>
@@ -508,27 +800,27 @@
       <div class="secondary-text mb-4">마케팅 예산, 인원, 가격, 제품 수, 신규 고객 등 다양한 변수를 조정할 수 있습니다.</div>
       
       <div class="row">
-        <div class="col-md-5 simulator-controls">
+        <div class="col-lg-5 simulator-controls">
           <div class="mb-4">
             <label for="marketingRange" class="form-label">마케팅 예산 증가율 (%)</label>
-            <input type="range" class="form-range mb-2" min="0" max="100" step="5" id="marketingRange" value="0" oninput="document.getElementById('marketingValue').innerText=this.value">
+            <input type="range" class="form-range mb-3" min="0" max="100" step="5" id="marketingRange" value="0" oninput="document.getElementById('marketingValue').innerText=this.value">
             <span id="marketingValue" class="badge bg-primary">0</span> %
           </div>
           
           <div class="mb-4">
             <label for="employeeInput" class="form-label">추가 인원 수</label>
-            <input type="number" class="form-control" id="employeeInput" min="0" max="20" value="0" style="max-width: 120px;">
+            <input type="number" class="form-control" id="employeeInput" min="0" max="20" value="0" style="max-width: 150px;">
           </div>
           
           <div class="mb-4">
             <label for="priceRange" class="form-label">제품 가격 조정 (%)</label>
-            <input type="range" class="form-range mb-2" min="-20" max="20" step="2" id="priceRange" value="0" oninput="document.getElementById('priceValue').innerText=this.value">
+            <input type="range" class="form-range mb-3" min="-20" max="20" step="2" id="priceRange" value="0" oninput="document.getElementById('priceValue').innerText=this.value">
             <span id="priceValue" class="badge bg-success">0</span> %
           </div>
           
           <div class="mb-4">
             <label for="newCustomerInput" class="form-label">신규 고객 유치 수</label>
-            <input type="number" class="form-control" id="newCustomerInput" min="0" max="100" value="0" style="max-width: 120px;">
+            <input type="number" class="form-control" id="newCustomerInput" min="0" max="100" value="0" style="max-width: 150px;">
           </div>
           
           <div class="tertiary-text">
@@ -537,26 +829,26 @@
           </div>
         </div>
         
-        <div class="col-md-7">
-          <div class="row g-3 mb-4">
-            <div class="col-6 col-lg-4">
+        <div class="col-lg-7">
+          <div class="row g-4 mb-4">
+            <div class="col-6 col-xl-4">
               <div class="kpi-card text-center p-3">
                 <div class="kpi-label">시뮬레이션 비용</div>
-                <div class="kpi-value" id="sim-cost" style="font-size: 1.75rem;">-</div>
+                <div class="kpi-value" id="sim-cost" style="font-size: 1.875rem;">-</div>
                 <div class="kpi-description">변수 조정 후 예상 비용</div>
               </div>
             </div>
-            <div class="col-6 col-lg-4">
+            <div class="col-6 col-xl-4">
               <div class="kpi-card text-center p-3">
                 <div class="kpi-label">시뮬레이션 ROI</div>
-                <div class="kpi-value" id="sim-roi" style="font-size: 1.75rem;">-</div>
+                <div class="kpi-value" id="sim-roi" style="font-size: 1.875rem;">-</div>
                 <div class="kpi-description">변수 조정 후 예상 ROI</div>
               </div>
             </div>
-            <div class="col-12 col-lg-4">
+            <div class="col-12 col-xl-4">
               <div class="kpi-card text-center p-3">
                 <div class="kpi-label">ROI 변화</div>
-                <div class="kpi-value" id="sim-roi-diff" style="font-size: 1.75rem;">-</div>
+                <div class="kpi-value" id="sim-roi-diff" style="font-size: 1.875rem;">-</div>
                 <div class="kpi-description">현재 대비 ROI 증감</div>
               </div>
             </div>
@@ -577,13 +869,13 @@
 
     <!-- 4. 자동 컨설팅 인사이트 & 예측 -->
     <div class="section-box animate__animated animate__fadeInUp">
-      <div class="section-title"><i class="fa-solid fa-lightbulb"></i> 자동 컨설팅 인사이트 & 예측</div>
+      <div class="section-title"><i class="fa-solid fa-lightbulb"></i> AI 컨설팅 인사이트 & 예측</div>
       <div class="primary-text">AI 기반 주요 경영 인사이트와 예측 결과를 자동으로 제공합니다.</div>
       <div class="secondary-text mb-4">데이터 업로드 및 시나리오 적용 시 위험 신호, 개선 제안, 성장 기회 등 다양한 인사이트가 자동 생성됩니다.</div>
       
       <div class="row">
         <div class="col-md-6">
-          <div class="primary-text mb-3">핵심 인사이트</div>
+          <div class="primary-text mb-3"><i class="fa-solid fa-brain"></i> 핵심 인사이트</div>
           <ul class="insight-list" id="insightList">
             <li>데이터를 업로드하면 자동 인사이트가 표시됩니다.</li>
           </ul>
@@ -602,7 +894,114 @@
       </div>
     </div>
 
-    <!-- 5. 데이터 테이블 (아코디언) -->
+    <!-- 5. 경쟁사 비교 분석 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-chart-simple"></i> 경쟁사 비교 분석</div>
+      <div class="primary-text">업계 벤치마크와 경쟁사 대비 성과를 분석하세요.</div>
+      <div class="secondary-text mb-4">매출 성장률, 이익률, 시장 점유율 등 주요 지표를 업계 평균 및 경쟁사와 비교하여 경쟁 우위를 파악할 수 있습니다.</div>
+      
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="dashboard-chart">
+            <div class="chart-title">경쟁사 대비 성과 비교</div>
+            <div class="chart-container">
+              <canvas id="competitorChart"></canvas>
+            </div>
+            <div class="chart-description">
+              매출 성장률, 이익률, 시장 점유율을 경쟁사와 비교하여 시장에서의 포지션을 파악하세요.
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="kpi-card text-center p-3">
+                <div class="kpi-label"><i class="fa-solid fa-trophy"></i> 시장 순위</div>
+                <div class="kpi-value" id="market-ranking" style="font-size: 2rem;">-</div>
+                <div class="kpi-description">업계 내 순위</div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="kpi-card text-center p-3">
+                <div class="kpi-label"><i class="fa-solid fa-target"></i> 시장 점유율</div>
+                <div class="kpi-value" id="market-share" style="font-size: 2rem;">-</div>
+                <div class="kpi-description">전체 시장 대비</div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="kpi-card text-center p-3">
+                <div class="kpi-label"><i class="fa-solid fa-chart-line"></i> 성장률 우위</div>
+                <div class="kpi-value" id="growth-advantage" style="font-size: 2rem;">-</div>
+                <div class="kpi-description">업계 평균 대비</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 고객 세그먼트 분석 -->
+    <div class="section-box animate__animated animate__fadeInUp">
+      <div class="section-title"><i class="fa-solid fa-users"></i> 고객 세그먼트 분석</div>
+      <div class="primary-text">고객을 세그먼트별로 분류하여 맞춤형 전략을 수립하세요.</div>
+      <div class="secondary-text mb-4">RFM 분석(최근성, 빈도, 금액)을 통해 고객을 분류하고, 각 세그먼트별 특성과 마케팅 전략을 제안합니다.</div>
+      
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="dashboard-chart">
+            <div class="chart-title">고객 세그먼트 분포</div>
+            <div class="chart-container">
+              <canvas id="customerSegmentChart"></canvas>
+            </div>
+            <div class="chart-description">
+              RFM 분석 기반으로 고객을 VIP, 충성고객, 일반고객, 이탈위험 고객으로 분류합니다.
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="dashboard-chart">
+            <div class="chart-title">세그먼트별 수익성</div>
+            <div class="chart-container">
+              <canvas id="segmentProfitChart"></canvas>
+            </div>
+            <div class="chart-description">
+              각 세그먼트별 매출 기여도와 수익성을 분석하여 집중해야 할 고객군을 식별합니다.
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="primary-text mb-3"><i class="fa-solid fa-bullseye"></i> 세그먼트별 전략 제안</div>
+          <ul class="insight-list" id="segmentStrategies">
+            <li><strong>VIP 고객:</strong> 프리미엄 서비스 및 개인 맞춤형 혜택 제공</li>
+            <li><strong>충성 고객:</strong> 리워드 프로그램 및 추천 인센티브 운영</li>
+            <li><strong>일반 고객:</strong> 크로스셀링 및 업셀링 기회 창출</li>
+            <li><strong>이탈위험 고객:</strong> 리텐션 캠페인 및 특별 할인 제공</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <div class="primary-text mb-3"><i class="fa-solid fa-chart-pie"></i> 고객 생애 가치 (CLV)</div>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="kpi-card text-center p-3" style="min-height: 120px;">
+                <div class="kpi-label">평균 CLV</div>
+                <div class="kpi-value" id="avg-clv" style="font-size: 1.5rem;">-</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="kpi-card text-center p-3" style="min-height: 120px;">
+                <div class="kpi-label">VIP CLV</div>
+                <div class="kpi-value" id="vip-clv" style="font-size: 1.5rem;">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. 데이터 테이블 (아코디언) -->
     <div class="accordion mb-4" id="dataAccordion">
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingData">
@@ -636,36 +1035,40 @@
       </div>
     </div>
 
-    <!-- 6. 분석 가이드 & 활용 예시 -->
+    <!-- 8. 분석 가이드 & 활용 예시 -->
     <div class="section-box animate__animated animate__fadeInUp">
       <div class="section-title"><i class="fa-solid fa-book-open"></i> 분석 가이드 & 활용 예시</div>
       <div class="primary-text mb-3">컨설팅 시뮬레이터를 100% 활용하는 방법!</div>
       
       <div class="row">
         <div class="col-md-6">
-          <div class="secondary-text mb-2"><strong>5단계 활용 프로세스</strong></div>
+          <div class="secondary-text mb-3"><strong>7단계 활용 프로세스</strong></div>
           <ul class="insight-list">
             <li><strong>1단계:</strong> CSV 데이터 업로드 (샘플 데이터로도 체험 가능)</li>
             <li><strong>2단계:</strong> KPI 대시보드에서 주요 지표와 트렌드 확인</li>
-            <li><strong>3단계:</strong> 시나리오 시뮬레이션으로 다양한 전략 실험</li>
-            <li><strong>4단계:</strong> 자동 인사이트와 예측 결과로 전략적 의사결정</li>
-            <li><strong>5단계:</strong> 원본 데이터 테이블에서 세부 내역 검토</li>
+            <li><strong>3단계:</strong> 11가지 시각화 차트로 다각도 분석</li>
+            <li><strong>4단계:</strong> 시나리오 시뮬레이션으로 다양한 전략 실험</li>
+            <li><strong>5단계:</strong> AI 인사이트와 예측 결과로 전략적 의사결정</li>
+            <li><strong>6단계:</strong> 경쟁사 비교 및 고객 세그먼트 분석</li>
+            <li><strong>7단계:</strong> 원본 데이터 테이블에서 세부 내역 검토</li>
           </ul>
         </div>
         <div class="col-md-6">
-          <div class="secondary-text mb-2"><strong>주요 활용 사례</strong></div>
+          <div class="secondary-text mb-3"><strong>주요 활용 사례</strong></div>
           <ul class="insight-list">
             <li>신규 제품 출시 시 예상 매출/ROI 시뮬레이션</li>
             <li>마케팅 예산 조정에 따른 비용 구조 및 성장률 변화 분석</li>
             <li>고객 세그먼트별 매출/이익률 분석을 통한 타겟 마케팅 전략 수립</li>
             <li>지역별 매출 데이터를 활용한 시장 확장 전략 도출</li>
+            <li>경쟁사 대비 성과 분석을 통한 경쟁 전략 수립</li>
+            <li>계절성 분석을 통한 재고 관리 및 생산 계획 최적화</li>
           </ul>
         </div>
       </div>
       
-      <div class="tertiary-text mt-3">
+      <div class="tertiary-text mt-4">
         <strong>문의/피드백:</strong> 추가 기능 요청 및 문의는 
-        <a href="mailto:consulting@simulator.com" class="text-decoration-none" style="color: #111827;">consulting@simulator.com</a> 으로 연락주세요.
+        <a href="mailto:consulting@simulator.com" class="text-decoration-none" style="color: #3b82f6;">consulting@simulator.com</a> 으로 연락주세요.
       </div>
     </div>
 
@@ -686,12 +1089,13 @@
     // 차트 설정 개선
     Chart.defaults.font.family = "'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', Arial, sans-serif";
     Chart.defaults.color = '#374151';
-    Chart.defaults.borderColor = '#e5e7eb';
+    Chart.defaults.borderColor = '#e2e8f0';
 
     // --- Chart.js chart instances ---
     let revenueCostChart, roiScenarioChart, forecastChart;
     let monthlyRevenueChart, customerRevenueChart, employeeProductivityChart, inventoryTurnoverChart;
-    let costStructureChart;
+    let costStructureChart, regionPerformanceChart, productProfitabilityChart, marketingROIChart;
+    let seasonalityChart, growthRateChart, competitorChart, customerSegmentChart, segmentProfitChart;
 
     // --- Helper: Format number with commas ---
     function formatNumber(num) {
@@ -737,6 +1141,8 @@
       updateKPIs(data);
       updateCharts(data);
       updateInsights(data);
+      updateCompetitorAnalysis(data);
+      updateCustomerSegments(data);
     }
 
     // --- Update Data Table ---
@@ -988,6 +1394,216 @@
           cutout: '60%'
         }
       });
+
+      // Region Performance Chart
+      if (regionPerformanceChart) regionPerformanceChart.destroy();
+      const ctx7 = document.getElementById('regionPerformanceChart').getContext('2d');
+      let regionMap = {};
+      data.forEach(row=>{
+        let reg = row.Region || '기타';
+        regionMap[reg] = (regionMap[reg]||0) + Number(row.Revenue);
+      });
+      let regLabels = Object.keys(regionMap);
+      let regData = Object.values(regionMap);
+      regionPerformanceChart = new Chart(ctx7, {
+        type: 'bar',
+        data: {
+          labels: regLabels,
+          datasets: [{
+            label: '지역별 매출',
+            data: regData,
+            backgroundColor: chartColors.accent,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: chartColors.light }
+            },
+            x: {
+              grid: { display: false }
+            }
+          }
+        }
+      });
+
+      // Product Profitability Chart
+      if (productProfitabilityChart) productProfitabilityChart.destroy();
+      const ctx8 = document.getElementById('productProfitabilityChart').getContext('2d');
+      let productMap = {};
+      data.forEach(row=>{
+        let prod = row.Product || '기타';
+        productMap[prod] = (productMap[prod]||0) + Number(row.Revenue);
+      });
+      let prodLabels = Object.keys(productMap);
+      let prodData = Object.values(productMap);
+      productProfitabilityChart = new Chart(ctx8, {
+        type: 'bubble',
+        data: {
+          labels: prodLabels,
+          datasets: [{
+            label: '제품별 수익성',
+            data: prodData.map((v,i)=>({x: i+1, y: v, r: Math.sqrt(v/1000)})),
+            backgroundColor: chartColors.primary,
+            borderWidth: 2,
+            hoverBackgroundColor: chartColors.secondary
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: chartColors.light }
+            },
+            x: {
+              grid: { display: false }
+            }
+          }
+        }
+      });
+
+      // Marketing ROI Chart
+      if (marketingROIChart) marketingROIChart.destroy();
+      const ctx9 = document.getElementById('marketingROIChart').getContext('2d');
+      let marketingData = [];
+      data.forEach(row=>{
+        let cost = Number(row.Cost);
+        let revenue = Number(row.Revenue);
+        if (cost && revenue) {
+          marketingData.push({ x: cost, y: revenue, r: Math.sqrt(revenue/1000) });
+        }
+      });
+      marketingROIChart = new Chart(ctx9, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: '마케팅 ROI',
+            data: marketingData,
+            backgroundColor: chartColors.accent,
+            borderWidth: 2,
+            hoverBackgroundColor: chartColors.primary
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: chartColors.light }
+            },
+            x: {
+              grid: { display: false }
+            }
+          }
+        }
+      });
+
+      // Seasonality Chart
+      if (seasonalityChart) seasonalityChart.destroy();
+      const ctx10 = document.getElementById('seasonalityChart').getContext('2d');
+      let monthNames = data.map(row=>new Date(row.Date).toLocaleString('default', { month: 'short' }));
+      let monthlyData = {};
+      data.forEach((row,i)=>{
+        let month = monthNames[i];
+        if (!monthlyData[month]) {
+          monthlyData[month] = { revenue: 0, cost: 0 };
+        }
+        monthlyData[month].revenue += Number(row.Revenue);
+        monthlyData[month].cost += Number(row.Cost);
+      });
+      let seaLabels = Object.keys(monthlyData);
+      let seaRevenue = seaLabels.map(m=>monthlyData[m].revenue);
+      let seaCost = seaLabels.map(m=>monthlyData[m].cost);
+      seasonalityChart = new Chart(ctx10, {
+        type: 'radar',
+        data: {
+          labels: seaLabels,
+          datasets: [
+            {
+              label: '매출',
+              data: seaRevenue,
+              backgroundColor: 'rgba(59, 130, 246, 0.2)',
+              borderColor: chartColors.primary,
+              borderWidth: 2
+            },
+            {
+              label: '비용',
+              data: seaCost,
+              backgroundColor: 'rgba(22, 163, 74, 0.2)',
+              borderColor: chartColors.secondary,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              beginAtZero: true,
+              grid: { color: chartColors.light },
+              angleLines: { color: chartColors.light },
+              ticks: {
+                color: chartColors.accent,
+                font: { weight: 600 }
+              }
+            }
+          }
+        }
+      });
+
+      // Growth Rate Chart
+      if (growthRateChart) growthRateChart.destroy();
+      const ctx11 = document.getElementById('growthRateChart').getContext('2d');
+      let growthData = [];
+      data.forEach((row,i)=>{
+        if (i > 0) {
+          let prevRevenue = Number(data[i-1].Revenue);
+          let currRevenue = Number(row.Revenue);
+          let growth = prevRevenue ? (currRevenue - prevRevenue) / prevRevenue : 0;
+          growthData.push({ x: i, y: growth });
+        }
+      });
+      growthRateChart = new Chart(ctx11, {
+        type: 'line',
+        data: {
+          labels: growthData.map((_,i)=>`변화 ${i+1}`),
+          datasets: [{
+            label: '성장률',
+            data: growthData.map(g=>g.y),
+            borderColor: chartColors.primary,
+            backgroundColor: 'rgba(17,24,39,0.1)',
+            tension: 0.4,
+            borderWidth: 3,
+            pointBackgroundColor: chartColors.primary,
+            pointRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: chartColors.light }
+            },
+            x: {
+              grid: { display: false }
+            }
+          }
+        }
+      });
     }
 
     // --- Scenario Simulation ---
@@ -1150,6 +1766,160 @@
         const li = document.createElement('li');
         li.innerText = txt;
         ul.appendChild(li);
+      });
+    }
+
+    // --- Competitor Analysis ---
+    function updateCompetitorAnalysis(data) {
+      // Dummy data for competitors
+      const competitorData = [
+        { name: '경쟁사 A', revenue: 500000, cost: 300000, marketShare: 0.25, growthRate: 0.1 },
+        { name: '경쟁사 B', revenue: 700000, cost: 450000, marketShare: 0.35, growthRate: 0.15 },
+        { name: '경쟁사 C', revenue: 300000, cost: 200000, marketShare: 0.2, growthRate: 0.05 },
+        { name: '경쟁사 D', revenue: 400000, cost: 250000, marketShare: 0.2, growthRate: 0.08 }
+      ];
+
+      // Update market ranking KPI
+      const marketRanking = competitorData.sort((a,b)=>b.revenue-a.revenue).findIndex(comp=>comp.name==='우리 회사') + 1;
+      document.getElementById('market-ranking').innerText = marketRanking + '위';
+
+      // Update market share KPI
+      const totalRevenue = competitorData.reduce((sum,comp)=>sum+comp.revenue,0);
+      const ourRevenue = globalData.reduce((a,b)=>a+Number(b.Revenue),0);
+      const ourMarketShare = (ourRevenue / totalRevenue) || 0;
+      document.getElementById('market-share').innerText = formatPercent(ourMarketShare);
+
+      // Update growth advantage KPI
+      const avgGrowthRate = competitorData.reduce((sum,comp)=>sum+comp.growthRate,0) / competitorData.length;
+      const ourGrowthRate = (ourRevenue - globalData[0].Revenue) / globalData[0].Revenue;
+      const growthAdvantage = ourGrowthRate - avgGrowthRate;
+      document.getElementById('growth-advantage').innerText = (growthAdvantage >= 0 ? '+' : '') + formatPercent(growthAdvantage);
+
+      // Competitor performance chart
+      if (competitorChart) competitorChart.destroy();
+      const ctxCompetitor = document.getElementById('competitorChart').getContext('2d');
+      new Chart(ctxCompetitor, {
+        type: 'bar',
+        data: {
+          labels: competitorData.map(comp=>comp.name),
+          datasets: [
+            {
+              label: '매출',
+              data: competitorData.map(comp=>comp.revenue),
+              backgroundColor: chartColors.primary,
+              borderRadius: 4
+            },
+            {
+              label: '비용',
+              data: competitorData.map(comp=>comp.cost),
+              backgroundColor: chartColors.secondary,
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { usePointStyle: true, padding: 20 } }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: chartColors.light }
+            },
+            x: {
+              grid: { display: false }
+            }
+          },
+          animation: { duration: 800, easing: 'easeOutQuart' }
+        }
+      });
+    }
+
+    // --- Customer Segmentation ---
+    function updateCustomerSegments(data) {
+      // Dummy RFM segmentation
+      const segments = [
+        { name: 'VIP 고객', condition: (row) => row.Revenue > 1000000 },
+        { name: '충성 고객', condition: (row) => row.Revenue > 500000 && row.Revenue <= 1000000 },
+        { name: '일반 고객', condition: (row) => row.Revenue > 100000 && row.Revenue <= 500000 },
+        { name: '이탈위험 고객', condition: (row) => row.Revenue <= 100000 }
+      ];
+
+      // Assign segments to data
+      data.forEach(row => {
+        let assigned = false;
+        for (let seg of segments) {
+          if (seg.condition(row)) {
+            row.Segment = seg.name;
+            assigned = true;
+            break;
+          }
+        }
+        if (!assigned) row.Segment = '기타';
+      });
+
+      // Update customer segment chart
+      if (customerSegmentChart) customerSegmentChart.destroy();
+      const ctxSegment = document.getElementById('customerSegmentChart').getContext('2d');
+      let segmentCounts = {};
+      data.forEach(row=>{
+        let seg = row.Segment;
+        segmentCounts[seg] = (segmentCounts[seg]||0) + 1;
+      });
+      new Chart(ctxSegment, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(segmentCounts),
+          datasets: [{
+            data: Object.values(segmentCounts),
+            backgroundColor: [chartColors.primary, chartColors.secondary, chartColors.accent, '#9ca3af', '#d1d5db']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } }
+          }
+        }
+      });
+
+      // Update segment profitability chart
+      if (segmentProfitChart) segmentProfitChart.destroy();
+      const ctxProfit = document.getElementById('segmentProfitChart').getContext('2d');
+      let segmentProfitData = segments.map(seg=>{
+        let totalRev = data.filter(row=>row.Segment===seg.name).reduce((sum,row)=>sum+Number(row.Revenue),0);
+        let totalCost = data.filter(row=>row.Segment===seg.name).reduce((sum,row)=>sum+Number(row.Cost),0);
+        return { label: seg.name, profit: totalRev - totalCost };
+      }).filter(seg=>seg.profit !== 0);
+
+      new Chart(ctxProfit, {
+        type: 'bar',
+        data: {
+          labels: segmentProfitData.map(seg=>seg.label),
+          datasets: [{
+            label: '세그먼트별 이익',
+            data: segmentProfitData.map(seg=>seg.profit),
+            backgroundColor: chartColors.accent,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: chartColors.light }
+            },
+            x: {
+              grid: { display: false }
+            }
+          }
+        }
       });
     }
   </script>
